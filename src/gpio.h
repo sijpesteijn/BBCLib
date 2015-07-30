@@ -16,15 +16,10 @@ typedef enum {
 	OUTPUT_PIN=1
 } PIN_DIRECTION;
 
-typedef enum {
-	LOW=0,
-	HIGH=1
-} PIN_VALUE;
-
 int export_gpio(unsigned int gpio_nr);
 int unexport_gpio(unsigned int gpio_nr);
 int gpio_set_dir(int gpio_nr, PIN_DIRECTION direction);
-int gpio_set_value(unsigned int gpio, PIN_VALUE value);
-int gpio_get_value(unsigned int gpio, unsigned int *value);
+int gpio_set_value(unsigned int gpio, int value);
+int gpio_get_value(unsigned int gpio);
 int gpio_set_edge(unsigned int gpio, char *edge);
 #endif /* GPIO_H_ */

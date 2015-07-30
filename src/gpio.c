@@ -59,7 +59,7 @@ int gpio_set_dir(int gpio, PIN_DIRECTION out_flag) {
 	return 0;
 }
 
-int gpio_set_value(unsigned int gpio, PIN_VALUE value) {
+int gpio_set_value(unsigned int gpio, int value) {
 	syslog (LOG_INFO, "gpio set value: %d, %d", gpio, value);
 	FILE *fd;
 	char buf[MAX_BUF];
@@ -72,39 +72,38 @@ int gpio_set_value(unsigned int gpio, PIN_VALUE value) {
 		return 1;
 	}
 
-	if (value==LOW)
-		fputs("0", fd);
-	else
-		fputs("1", fd);
+	char str[2];
+	sprintf(str, "%d", value);
+	fputs(str, fd);
 
 	fclose(fd);
 	return 0;
 }
 
-int gpio_get_value(unsigned int gpio, unsigned int *value) {
+int gpio_get_value(unsigned int gpio) {
 	syslog (LOG_INFO, "gpio get value: %d", gpio);
+	int value;
 	FILE *fd;
 	char buf[MAX_BUF];
-	char ch;
 
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
-
-	fd = fopen(buf, O_RDONLY);
+	fd = fopen(buf, "r");
 	if (fd < 0) {
 		perror("gpio/get-value");
 		return 1;
 	}
 
-	ch = fgetc(fd);
+	char str[2];
+	fgets(str, 2, fd);
 
-	if (ch != '0') {
-		*value = 1;
+	if (strcmp(str, "1") == 0) {
+		value = 1;
 	} else {
-		*value = 0;
+		value = 0;
 	}
 
 	fclose(fd);
-	return 0;
+	return value;
 }
 
 int gpio_set_edge(unsigned int gpio, char *edge) {

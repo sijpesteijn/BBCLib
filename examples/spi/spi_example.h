@@ -148,7 +148,7 @@ int spiMCP4902Example() {
 
 	if (isOpen == 0) {
 		int i = 0;
-		while(i++ < 10) {
+		while(i++ < 100) {
 			unsigned char value = 0x00;
 			int j = 0;
 			while(j++ < 256) {
@@ -156,7 +156,7 @@ int spiMCP4902Example() {
 				dataA[1] = (value & 0x0f) << 4;
 				dataB[0] = regB | ((~value & 0xf0) >> 4);
 				dataB[1] = (~value & 0x0f) << 4;
-				gpio_set_value(LEDGPIO, HIGH);
+				gpio_set_value(LEDGPIO, 1);
 				syslog(LOG_INFO, "A: 0x%02x 0x%02x\n", dataA[0], dataA[1]);
 				if (spi_send(spi, dataA, sizeof(dataA)) == -1) {
 					perror("Failed to update output A");
@@ -166,8 +166,8 @@ int spiMCP4902Example() {
 					perror("Failed to update output B");
 					return -1;
 				}
-				gpio_set_value(LEDGPIO, LOW);
 				usleep(10000);
+				gpio_set_value(LEDGPIO, 0);
 				value = value + 1;
 			}
 		}
@@ -182,6 +182,8 @@ int spiMCP4902Example() {
  */
 int spiMCP4912Example() {
 	setup();
+	export_gpio(LEDGPIO);
+	gpio_set_dir(LEDGPIO, OUTPUT_PIN);
 
 	unsigned char regA = 0x70;
 	unsigned char regB = 0xB0;
@@ -211,8 +213,7 @@ int spiMCP4912Example() {
 				if (lvalue == 0xff) {
 					hvalue = hvalue + 1;
 				}
-				lvalue = lvalue + 1;
-
+				gpio_set_value(LEDGPIO, 1);
 				if (spi_send(spi, dataA, sizeof(dataA)) == -1) {
 					perror("Failed to update output A");
 					return -1;
@@ -221,7 +222,9 @@ int spiMCP4912Example() {
 					perror("Failed to update output B");
 					return -1;
 				}
-				usleep(10000);
+				gpio_set_value(LEDGPIO, 0);
+				usleep(100000);
+				lvalue = lvalue + 1;
 			}
 		}
 	}
@@ -235,6 +238,8 @@ int spiMCP4912Example() {
  */
 int spiMCP4922Example() {
 	setup();
+	export_gpio(LEDGPIO);
+	gpio_set_dir(LEDGPIO, OUTPUT_PIN);
 
 	unsigned char regA = 0x70;
 	unsigned char regB = 0xB0;
@@ -259,6 +264,7 @@ int spiMCP4922Example() {
 				dataA[1] = value;
 				dataB[0] = regB | ((~value & 0xf0) >> 4);
 				dataB[1] = ~value;
+				gpio_set_value(LEDGPIO, 1);
 				if (spi_send(spi, dataA, sizeof(dataA)) == -1) {
 					perror("Failed to update output A");
 					return -1;
@@ -267,7 +273,9 @@ int spiMCP4922Example() {
 					perror("Failed to update output B");
 					return -1;
 				}
+				gpio_set_value(LEDGPIO, 0);
 				usleep(10000);
+				value = value + 1;
 			}
 		}
 	}
