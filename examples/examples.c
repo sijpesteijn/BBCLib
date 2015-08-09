@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 	printf("9 - i2c ADXL345\n");
 	printf("0 - all\n");
 
-	int c = getchar( );
+	int c = '7'; //getchar( );
 	if (c == '1' || c == '0')
 		onBoardLedsExample();
 	if (c == '2' || c == '0')

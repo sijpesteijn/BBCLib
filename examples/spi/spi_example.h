@@ -122,6 +122,16 @@ int spiADXL345Example() {
 	return 0;
 }
 
+void setOutput(spi_properties *spi, unsigned char output, unsigned char value) {
+	unsigned char data[2] = {};
+	data[0] = output | ((value & 0xf0) >> 4);
+	data[1] = (value & 0x0f) << 4;
+	syslog(LOG_INFO, "Output: 0x%02x 0x%02x\n", data[0], data[1]);
+	if (spi_send(spi, data, sizeof(data)) == -1) {
+		perror("Failed to update output.");
+	}
+}
+
 /*
  * MCP4902 is a 8-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface.
  * This example will increase the output for A untill the maximum and then decrease to the minimum 10 times.
@@ -133,10 +143,6 @@ int spiMCP4902Example() {
 	export_gpio(LEDGPIO);
 	gpio_set_dir(LEDGPIO, OUTPUT_PIN);
 
-	unsigned char regA = 0x70;
-	unsigned char regB = 0xB0;
-	unsigned char dataA[2] = {};
-	unsigned char dataB[2] = {};
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
 	spi->bits_per_word = 8;
@@ -148,24 +154,12 @@ int spiMCP4902Example() {
 
 	if (isOpen == 0) {
 		int i = 0;
-		while(i++ < 100) {
+		while(i++ < 10) {
 			unsigned char value = 0x00;
-			int j = 0;
-			while(j++ < 256) {
-				dataA[0] = regA | ((value & 0xf0) >> 4);
-				dataA[1] = (value & 0x0f) << 4;
-				dataB[0] = regB | ((~value & 0xf0) >> 4);
-				dataB[1] = (~value & 0x0f) << 4;
+			while(value < 0xff) {
 				gpio_set_value(LEDGPIO, 1);
-				syslog(LOG_INFO, "A: 0x%02x 0x%02x\n", dataA[0], dataA[1]);
-				if (spi_send(spi, dataA, sizeof(dataA)) == -1) {
-					perror("Failed to update output A");
-					return -1;
-				}
-				if (spi_send(spi, dataB, sizeof(dataB)) == -1) {
-					perror("Failed to update output B");
-					return -1;
-				}
+				setOutput(spi, 0x70, value);
+				setOutput(spi, 0xf0, ~value);
 				usleep(10000);
 				gpio_set_value(LEDGPIO, 0);
 				value = value + 1;
