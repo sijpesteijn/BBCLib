@@ -6,8 +6,8 @@
  */
 
 #include <stdio.h>
-#include "../src/core.h"
-#include "../src/i2c.h"
+#include "../../src/core.h"
+#include "../../src/i2c.h"
 
 
 int pwmExample() {

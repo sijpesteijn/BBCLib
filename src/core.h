@@ -20,6 +20,7 @@
 
 
 #define SYSFS_GPIO_DIR "/sys/class/gpio"
+#define SLOTS	"/sys/devices/bone_capemgr.9/slots"
 #define POLL_TIMEOUT (3 * 1000) /* 3 seconds */
 #define MAX_BUF 64
 

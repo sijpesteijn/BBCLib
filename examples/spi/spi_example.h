@@ -110,8 +110,6 @@ int spiADXL345Example() {
 			data[0] = receive[1]<<8 | receive[0]; // combine MSB and LSB
 			data[1] = receive[3]<<8 | receive[2];
 			data[2] = receive[5]<<8 | receive[4];
-//			x=0.004*data[0]; y=0.004*data[1]; z=0.004*data[2];
-//			printf("x = %+1.2fg\t y = %+1.2fg\t z = %+1.2fg\n\r", x, y,z);
 			printf("x = %i \ty = %i\t z = %i\n", data[0], data[1], data[2]);
 			data[0] = 0;
 			data[1] = 0;
@@ -122,11 +120,11 @@ int spiADXL345Example() {
 	return 0;
 }
 
-void setOutput(spi_properties *spi, unsigned char output, unsigned char value) {
+void setOutput(spi_properties *spi, unsigned char reg, unsigned char value) {
 	unsigned char data[2] = {};
-	data[0] = output | ((value & 0xf0) >> 4);
+	data[0] = reg | ((value & 0xf0) >> 4);
 	data[1] = (value & 0x0f) << 4;
-	syslog(LOG_INFO, "Output: 0x%02x 0x%02x\n", data[0], data[1]);
+//	syslog(LOG_INFO, "Output: 0x%02x 0x%02x\n", data[0], data[1]);
 	if (spi_send(spi, data, sizeof(data)) == -1) {
 		perror("Failed to update output.");
 	}
@@ -150,19 +148,31 @@ int spiMCP4902Example() {
 	spi->speed = 2000000;
 	spi->flags = O_RDWR;
 
+	int delay = 1;
+
 	uint8_t isOpen = spi_open(spi);
 
 	if (isOpen == 0) {
+		gpio_set_value(LEDGPIO, 0);
+
 		int i = 0;
-		while(i++ < 10) {
+		while(i++ < 1000) {
 			unsigned char value = 0x00;
 			while(value < 0xff) {
-				gpio_set_value(LEDGPIO, 1);
+//				gpio_set_value(LEDGPIO, 1);
 				setOutput(spi, 0x70, value);
 				setOutput(spi, 0xf0, ~value);
-				usleep(10000);
-				gpio_set_value(LEDGPIO, 0);
+//				usleep(delay);
+//				gpio_set_value(LEDGPIO, 0);
 				value = value + 1;
+			}
+			while(value > 0x00) {
+				value = value - 1;
+//				gpio_set_value(LEDGPIO, 1);
+				setOutput(spi, 0x70, value);
+				setOutput(spi, 0xf0, ~value);
+//				usleep(delay);
+//				gpio_set_value(LEDGPIO, 0);
 			}
 		}
 	}

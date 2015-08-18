@@ -8,9 +8,9 @@
 #include <stdio.h>
 #include "./gpio/gpio_example.h"
 #include "./i2c/i2c_example.h"
-#include "pwm_example.h"
+#include "./pwm/pwm_example.h"
 #include "./spi/spi_example.h"
-#include "uart_example.h"
+#include "./uart/uart_example.h"
 #include "./leds/onboardleds.h"
 
 
@@ -27,26 +27,27 @@ int main(int argc, char **argv) {
 	printf("9 - i2c ADXL345\n");
 	printf("0 - all\n");
 
-	int c = '7'; //getchar( );
-	if (c == '1' || c == '0')
+//	unsigned char k = getchar();
+	int c = 1; // atoi(k);
+	if (c == 1 || c == 0)
 		onBoardLedsExample();
-	if (c == '2' || c == '0')
+	if (c == 2 || c == 0)
 		gpioLedExample();
-	if (c == '3' || c == '0')
+	if (c == 3 || c == 0)
 		gpioInputExample();
-	if (c == '4' || c == '0')
+	if (c == 4 || c == 0)
 		gpioInputLedExample();
-	if (c == '5' || c == '0')
+	if (c == 5 || c == 0)
 		spiMCP23S08Example();
-	if (c == '6' || c == '0')
+	if (c == 6 || c == 0)
 		spiADXL345Example();
-	if (c == '7' || c == '0')
+	if (c == 7 || c == 0)
 		spiMCP4902Example();
-	if (c == '8' || c == '0')
+	if (c == 8 || c == 0)
 		i2c8x8LedMatrix();
-	if (c == '9' || c == '0')
+	if (c == 9 || c == 0)
 		i2cADXL345();
-//	if (c == '6' || c=='0')
-//		spiTestExample(0,NULL);
+	if (c == 10 || c == 0)
+		uartExample();
 	return 0;
 }
