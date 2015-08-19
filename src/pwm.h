@@ -8,8 +8,18 @@
 #ifndef PWM_H_
 #define PWM_H_
 
+#include "./core.h"
+
+#define PWM_PATH "/sys/devices/ocp.3/"
+typedef struct {
+	char *name;
+} pwm_properties;
 
 
+int pwm_open(pwm_properties *pwm);
+int pwm_set_run(pwm_properties *pwm, int run);
+int pwm_set_period(pwm_properties *pwm, int period);
+int pwm_set_duty(pwm_properties *pwm, int duty);
 
 
 #endif /* PWM_H_ */

@@ -8,7 +8,7 @@
 #include "core.h"
 #include "i2c.h"
 
-int res, daddress, file;
+int res, daddress;
 
 //void  INThandler(int sig)
 //{
@@ -30,17 +30,17 @@ int res, daddress, file;
 //        exit(0);
 //}
 
-int open_i2c(i2c i2cnr, int deviceAddress, int openMode) {
-	syslog(LOG_INFO, "i2c open - i2c:%d device address: 0x%x mode:%i", i2cnr,
+int open_i2c(i2c_properties *i2c, int deviceAddress, int openMode) {
+	syslog(LOG_INFO, "i2c open - i2c:%d device address: 0x%x mode:%i", i2c->i2cnr,
 			deviceAddress, openMode);
 	char filename[20];
 
-	sprintf(filename, "/dev/i2c-%d", i2cnr);
-	file = open(filename, O_RDWR);
-	if (file < 0) {
+	sprintf(filename, "/dev/i2c-%d", i2c->i2cnr);
+	i2c->fd = open(filename, O_RDWR);
+	if (i2c->fd < 0) {
 		if (errno == ENOENT) {
 			syslog(LOG_ERR, "Error: Could not open file "
-					"/dev/i2c-%d: %s\n", i2cnr, strerror(ENOENT));
+					"/dev/i2c-%d: %s\n", i2c->i2cnr, strerror(ENOENT));
 		} else {
 			syslog(LOG_ERR, "Error: Could not open file "
 
@@ -52,7 +52,7 @@ int open_i2c(i2c i2cnr, int deviceAddress, int openMode) {
 	}
 
 //	signal(SIGINT, INThandler);
-	if (ioctl(file, I2C_SLAVE, deviceAddress) < 0) {
+	if (ioctl(i2c->fd, I2C_SLAVE, deviceAddress) < 0) {
 		syslog(LOG_ERR, "Error: Could not set address to 0x%02x: %s\n",
 				deviceAddress, strerror(errno));
 		return -errno;
@@ -60,31 +60,31 @@ int open_i2c(i2c i2cnr, int deviceAddress, int openMode) {
 	return 0;
 }
 
-int write_byte_i2c(unsigned char reg) {
-	res = i2c_smbus_write_byte(file, reg);
+int write_byte_i2c(i2c_properties *i2c, unsigned char reg) {
+	res = i2c_smbus_write_byte(i2c->fd, reg);
 	if (res < 0) {
 		syslog(LOG_ERR, "Warning - write failed, filename=%i, register=%i\n",
-				file, reg);
+				i2c->fd, reg);
 		return 1;
 	}
 	return 0;
 }
 
-int write_data_i2c(unsigned char reg, char value) {
+int write_data_i2c(i2c_properties *i2c, unsigned char reg, char value) {
 	unsigned char buf[2];
 	buf[0] = reg;
 	buf[1] = value;
-	if (write(file, buf, 2) != 2) {
+	if (write(i2c->i2cnr, buf, 2) != 2) {
 		syslog(LOG_ERR,
-				"Warning - write data failed, filename=%i, register=%i\n", file,
+				"Warning - write data failed, filename=%i, register=%i\n", i2c->fd,
 				reg);
 		return 1;
 	}
 	return 0;
 }
 
-int read_i2c(unsigned char *readBuffer, int bufferSize) {
-	if (read(file, readBuffer, bufferSize) != bufferSize) {
+int read_i2c(i2c_properties *i2c, unsigned char *readBuffer, int bufferSize) {
+	if (read(i2c->fd, readBuffer, bufferSize) != bufferSize) {
 		perror("Failed to read in the buffer\n");
 		return 1;
 	}
