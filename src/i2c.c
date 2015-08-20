@@ -10,33 +10,13 @@
 
 int res, daddress;
 
-//void  INThandler(int sig)
-//{
-//       // Closing file and turning off Matrix
-//
-////	unsigned short int clear[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-//
-////	displayImage(clear,res, daddress, file);
-//
-//        printf("Closing file and turning off the LED Matrix\n");
-//        daddress = 0x20;
-//        for(daddress = 0xef; daddress >= 0xe0; daddress--) {
-//                res = i2c_smbus_write_byte(file, daddress);
-//        }
-//
-//	signal(sig, SIG_IGN);
-//
-//        close(file);
-//        exit(0);
-//}
-
-int open_i2c(i2c_properties *i2c, int deviceAddress, int openMode) {
+int open_i2c(i2c_properties *i2c) {
 	syslog(LOG_INFO, "i2c open - i2c:%d device address: 0x%x mode:%i", i2c->i2cnr,
-			deviceAddress, openMode);
+			i2c->deviceAddress, i2c->openMode);
 	char filename[20];
 
 	sprintf(filename, "/dev/i2c-%d", i2c->i2cnr);
-	i2c->fd = open(filename, O_RDWR);
+	i2c->fd = open(filename, i2c->openMode);
 	if (i2c->fd < 0) {
 		if (errno == ENOENT) {
 			syslog(LOG_ERR, "Error: Could not open file "
@@ -51,10 +31,9 @@ int open_i2c(i2c_properties *i2c, int deviceAddress, int openMode) {
 		return -1;
 	}
 
-//	signal(SIGINT, INThandler);
-	if (ioctl(i2c->fd, I2C_SLAVE, deviceAddress) < 0) {
+	if (ioctl(i2c->fd, I2C_SLAVE, i2c->deviceAddress) < 0) {
 		syslog(LOG_ERR, "Error: Could not set address to 0x%02x: %s\n",
-				deviceAddress, strerror(errno));
+				i2c->deviceAddress, strerror(errno));
 		return -errno;
 	}
 	return 0;

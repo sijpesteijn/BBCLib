@@ -138,8 +138,9 @@ void setOutput(spi_properties *spi, unsigned char reg, unsigned char value) {
 int spiMCP4902Example() {
 	setup();
 
-	export_gpio(LEDGPIO);
-	gpio_set_dir(LEDGPIO, OUTPUT_PIN);
+	gpio_properties *gpio = malloc(sizeof(gpio_properties));
+	gpio->nr = LEDGPIO;
+	gpio->direction = OUTPUT_PIN;
 
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
@@ -148,12 +149,10 @@ int spiMCP4902Example() {
 	spi->speed = 2000000;
 	spi->flags = O_RDWR;
 
-	int delay = 1;
-
-	uint8_t isOpen = spi_open(spi);
+	uint8_t isOpen = gpio_open(gpio) && spi_open(spi);
 
 	if (isOpen == 0) {
-		gpio_set_value(LEDGPIO, 0);
+		gpio_set_value(gpio, 0);
 
 		int i = 0;
 		while(i++ < 1000) {
@@ -176,6 +175,8 @@ int spiMCP4902Example() {
 			}
 		}
 	}
+	free(gpio);
+	free(spi);
 	return 1;
 }
 
@@ -186,8 +187,10 @@ int spiMCP4902Example() {
  */
 int spiMCP4912Example() {
 	setup();
-	export_gpio(LEDGPIO);
-	gpio_set_dir(LEDGPIO, OUTPUT_PIN);
+
+	gpio_properties *gpio = malloc(sizeof(gpio_properties));
+	gpio->nr = LEDGPIO;
+	gpio->direction = OUTPUT_PIN;
 
 	unsigned char regA = 0x70;
 	unsigned char regB = 0xB0;
@@ -200,7 +203,7 @@ int spiMCP4912Example() {
 	spi->speed = 500000;
 	spi->flags = O_RDWR;
 
-	uint8_t isOpen = spi_open(spi);
+	uint8_t isOpen = gpio_open(gpio) && spi_open(spi);
 
 	if (isOpen == 0) {
 		int i = 0;
@@ -217,7 +220,7 @@ int spiMCP4912Example() {
 				if (lvalue == 0xff) {
 					hvalue = hvalue + 1;
 				}
-				gpio_set_value(LEDGPIO, 1);
+				gpio_set_value(gpio, 1);
 				if (spi_send(spi, dataA, sizeof(dataA)) == -1) {
 					perror("Failed to update output A");
 					return -1;
@@ -226,12 +229,14 @@ int spiMCP4912Example() {
 					perror("Failed to update output B");
 					return -1;
 				}
-				gpio_set_value(LEDGPIO, 0);
+				gpio_set_value(gpio, 0);
 				usleep(100000);
 				lvalue = lvalue + 1;
 			}
 		}
 	}
+	free(gpio);
+	free(spi);
 	return 1;
 }
 
@@ -242,8 +247,9 @@ int spiMCP4912Example() {
  */
 int spiMCP4922Example() {
 	setup();
-	export_gpio(LEDGPIO);
-	gpio_set_dir(LEDGPIO, OUTPUT_PIN);
+	gpio_properties *gpio = malloc(sizeof(gpio_properties));
+	gpio->nr = LEDGPIO;
+	gpio->direction = OUTPUT_PIN;
 
 	unsigned char regA = 0x70;
 	unsigned char regB = 0xB0;
@@ -268,7 +274,7 @@ int spiMCP4922Example() {
 				dataA[1] = value;
 				dataB[0] = regB | ((~value & 0xf0) >> 4);
 				dataB[1] = ~value;
-				gpio_set_value(LEDGPIO, 1);
+				gpio_set_value(gpio, 1);
 				if (spi_send(spi, dataA, sizeof(dataA)) == -1) {
 					perror("Failed to update output A");
 					return -1;
@@ -277,11 +283,13 @@ int spiMCP4922Example() {
 					perror("Failed to update output B");
 					return -1;
 				}
-				gpio_set_value(LEDGPIO, 0);
+				gpio_set_value(gpio, 0);
 				usleep(10000);
 				value = value + 1;
 			}
 		}
 	}
+	free(spi);
+	free(gpio);
 	return 1;
 }

@@ -8,40 +8,19 @@
 #include "core.h"
 #include "gpio.h"
 
-int export_gpio(unsigned int gpio) {
-	syslog (LOG_INFO, "export gpio: %d", gpio);
-	FILE *fd;
-	fd = fopen(SYSFS_GPIO_DIR "/export", "w");
-	if (fd < 0) {
+int gpio_open(gpio_properties *gpio) {
+	syslog (LOG_INFO, "gpio_open: export gpio: %d", gpio->nr);
+	FILE *export;
+	export = fopen(SYSFS_GPIO_DIR "/export", "w");
+	if (export < 0) {
 		perror("gpio/export");
 		return 1;
 	}
 	char str[15];
 	sprintf(str, "%d", gpio);
-	fputs(str, fd);
-	fclose(fd);
-
-	return 0;
-}
-
-int unexport_gpio(unsigned int gpio) {
-	syslog (LOG_INFO, "unexport gpio: %d", gpio);
-	FILE *fd;
-	fd = fopen(SYSFS_GPIO_DIR "/unexport", "w");
-	if (fd < 0) {
-		perror("gpio/unexport");
-		return 1;
-	}
-	char str[15];
-	sprintf(str, "%d", gpio);
-	fputs(str, fd);
-	fclose(fd);
-
-	return 0;
-}
-
-int gpio_set_dir(int gpio, PIN_DIRECTION out_flag) {
-	syslog (LOG_INFO, "gpio set direction: %d, %d", gpio, out_flag);
+	fputs(str, export);
+	fclose(export);
+	syslog (LOG_INFO, "gpio_open: set direction: %d, %d", gpio->nr, gpio->direction);
 	FILE *fd;
 	char buf[MAX_BUF];
 
@@ -51,7 +30,7 @@ int gpio_set_dir(int gpio, PIN_DIRECTION out_flag) {
 		perror("gpio/direction");
 		return 1;
 	}
-	if (out_flag == OUTPUT_PIN)
+	if (gpio->direction == OUTPUT_PIN)
 		fputs("out", fd);
 	else
 		fputs("in", fd);
@@ -59,12 +38,28 @@ int gpio_set_dir(int gpio, PIN_DIRECTION out_flag) {
 	return 0;
 }
 
-int gpio_set_value(unsigned int gpio, int value) {
-	syslog (LOG_INFO, "gpio set value: %d, %d", gpio, value);
+int gpio_close(gpio_properties *gpio) {
+	syslog (LOG_INFO, "gpio_close: unexport gpio: %d", gpio->nr);
+	FILE *fd;
+	fd = fopen(SYSFS_GPIO_DIR "/unexport", "w");
+	if (fd < 0) {
+		perror("gpio/unexport");
+		return 1;
+	}
+	char str[15];
+	sprintf(str, "%d", gpio->nr);
+	fputs(str, fd);
+	fclose(fd);
+
+	return 0;
+}
+
+int gpio_set_value(gpio_properties *gpio, int value) {
+	syslog (LOG_INFO, "gpio set value: %d, %d", gpio->nr, value);
 	FILE *fd;
 	char buf[MAX_BUF];
 
-	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio->nr);
 
 	fd = fopen(buf, "w");
 	if (fd < 0) {
@@ -80,13 +75,13 @@ int gpio_set_value(unsigned int gpio, int value) {
 	return 0;
 }
 
-int gpio_get_value(unsigned int gpio) {
-	syslog (LOG_INFO, "gpio get value: %d", gpio);
+int gpio_get_value(gpio_properties *gpio) {
+	syslog (LOG_INFO, "gpio get value: %d", gpio->nr);
 	int value;
 	FILE *fd;
 	char buf[MAX_BUF];
 
-	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio);
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", gpio->nr);
 	fd = fopen(buf, "r");
 	if (fd < 0) {
 		perror("gpio/get-value");
@@ -106,12 +101,12 @@ int gpio_get_value(unsigned int gpio) {
 	return value;
 }
 
-int gpio_set_edge(unsigned int gpio, char *edge) {
-	syslog (LOG_INFO, "gpio set edge: %d, %s", gpio, edge);
+int gpio_set_edge(gpio_properties *gpio, char *edge) {
+	syslog (LOG_INFO, "gpio set edge: %d, %s", gpio->nr, edge);
 	FILE *fd;
 	char buf[MAX_BUF];
 
-	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/edge", gpio);
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/edge", gpio->nr);
 
 	fd = fopen(buf, "w");
 	if (fd < 0) {

@@ -16,10 +16,14 @@ typedef enum {
 	OUTPUT_PIN=1
 } PIN_DIRECTION;
 
-int export_gpio(unsigned int gpio_nr);
-int unexport_gpio(unsigned int gpio_nr);
-int gpio_set_dir(int gpio_nr, PIN_DIRECTION direction);
-int gpio_set_value(unsigned int gpio, int value);
-int gpio_get_value(unsigned int gpio);
-int gpio_set_edge(unsigned int gpio, char *edge);
+typedef struct {
+	int nr;
+	PIN_DIRECTION direction;
+} gpio_properties;
+
+int gpio_open(gpio_properties *gpio);
+int gpio_close(gpio_properties *gpio);
+int gpio_set_value(gpio_properties *gpio, int value);
+int gpio_get_value(gpio_properties *gpio);
+int gpio_set_edge(gpio_properties *gpio, char *edge);
 #endif /* GPIO_H_ */

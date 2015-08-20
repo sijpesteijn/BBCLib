@@ -17,16 +17,23 @@ unsigned int BUTTONGPIO = 15;
  */
 int gpioLedExample() {
 	init_bbc_lib();
-	export_gpio(LEDGPIO);
-	gpio_set_dir(LEDGPIO, OUTPUT_PIN);
-	int i=0;
-	for(i=0;i<20;i++) {
-		gpio_set_value(LEDGPIO, 1);
-		usleep(100000);
-		gpio_set_value(LEDGPIO, 0);
-		usleep(100000);
+	gpio_properties *gpio = malloc(sizeof(gpio_properties));
+	gpio->nr = LEDGPIO;
+	gpio->direction = OUTPUT_PIN;
+
+	int isOpen = gpio_open(gpio);
+
+	if (isOpen == 1) {
+		int i=0;
+		for(i=0;i<20;i++) {
+			gpio_set_value(gpio, 1);
+			usleep(100000);
+			gpio_set_value(gpio, 0);
+			usleep(100000);
+		}
+		gpio_close(gpio);
 	}
-	unexport_gpio(LEDGPIO);
+	free(gpio);
 	syslog(LOG_INFO, "%s", "Finished gpio led example.");
 	return 0;
 }
@@ -37,14 +44,21 @@ int gpioLedExample() {
 int gpioInputExample() {
 	int value, i;
 	init_bbc_lib();
-	export_gpio(BUTTONGPIO);
-	gpio_set_dir(BUTTONGPIO, INPUT_PIN);
-	for(i=0;i<60;i++) {
-		value = gpio_get_value(BUTTONGPIO);
-		printf("Value: %d\n", value);
-		usleep(1000000);
+
+	gpio_properties *gpio = malloc(sizeof(gpio_properties));
+	gpio->nr = BUTTONGPIO;
+	gpio->direction = INPUT_PIN;
+
+	int isOpen = gpio_open(gpio);
+
+	if (isOpen == 1) {
+		for(i=0;i<60;i++) {
+			value = gpio_get_value(gpio);
+			printf("Value: %d\n", value);
+			usleep(1000000);
+		}
+		gpio_close(gpio);
 	}
-	unexport_gpio(BUTTONGPIO);
 	syslog(LOG_INFO, "%s", "Finished gpio input example.");
 	return 0;
 }
@@ -57,17 +71,27 @@ int gpioInputExample() {
 int gpioInputLedExample() {
 	int value, i;
 	init_bbc_lib();
-	export_gpio(LEDGPIO);
-	export_gpio(BUTTONGPIO);
-	gpio_set_dir(LEDGPIO, OUTPUT_PIN);
-	gpio_set_dir(BUTTONGPIO, INPUT_PIN);
-	for(i=0;i<60;i++) {
-		value = gpio_get_value(LEDGPIO);
-		gpio_set_value(LEDGPIO, value);
-		usleep(1000000);
+
+	gpio_properties *led = malloc(sizeof(gpio_properties));
+	led->nr = LEDGPIO;
+	led->direction = OUTPUT_PIN;
+	gpio_properties *button = malloc(sizeof(gpio_properties));
+	button->nr = BUTTONGPIO;
+	button->direction = INPUT_PIN;
+
+	int isOpen = gpio_open(led) && gpio_open(button);
+
+	if (isOpen == 1) {
+		for(i=0;i<60;i++) {
+			value = gpio_get_value(led);
+			gpio_set_value(led, value);
+			usleep(1000000);
+		}
+		gpio_close(led);
+		gpio_close(button);
 	}
-	unexport_gpio(LEDGPIO);
-	unexport_gpio(BUTTONGPIO);
+	free(led);
+	free(button);
 	syslog(LOG_INFO, "%s", "Finished gpio input led example.");
 	return 0;
 }

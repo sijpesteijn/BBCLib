@@ -13,9 +13,9 @@ root@beaglebone:/dev# cat /media/BEAGLEBONE/uEnv.txt
 optargs=quiet drm.debug=7 capemgr.enable_partno=BB-UART4
 
 After reboot, the device is present in the device list:
-root@beaglebone:/dev# ls -l /dev/ttyO*
-crw-rw---- 1 root tty     249, 0 Jan  1 01:18 /dev/ttyO0
-crw-rw---- 1 root dialout 249, 4 Jan  1 01:18 /dev/ttyO4
+ root@beaglebone:/dev# ls -l /dev/ttyO*
+ crw-rw---- 1 root tty     249, 0 Jan  1 01:18 /dev/ttyO0
+ crw-rw---- 1 root dialout 249, 4 Jan  1 01:18 /dev/ttyO4
 
 
 The UARTs map to pins and devices like this:

@@ -56,8 +56,10 @@ void play(i2c_properties *i2c, size_t nrows, const __u8 shape[nrows][16], int de
 int i2c8x8LedMatrix() {
 	i2c_properties *i2c = malloc(sizeof(i2c_properties));
 	i2c->i2cnr = i2c1;
+	i2c->deviceAddress = 0x70;
+	i2c->openMode = O_RDWR;
 	init_bbc_lib();
-	if (open_i2c(i2c, 0x70, O_RDWR) == -1) {
+	if (open_i2c(i2c) == -1) {
 		syslog(LOG_ERR, "%s", "Could not open i2c bus.");
 		return 0;
 	}
@@ -90,7 +92,9 @@ int i2cADXL345() {
 	init_bbc_lib();
 	i2c_properties *i2c = malloc(sizeof(i2c_properties));
 	i2c->i2cnr = i2c1;
-	if (open_i2c(i2c, ADX_DEVID, O_RDWR) == -1) {
+	i2c->deviceAddress = ADX_DEVID;
+	i2c->openMode = O_RDWR;
+	if (open_i2c(i2c) == -1) {
 		syslog(LOG_ERR, "%s", "Could not open i2c bus.");
 		return 0;
 	}

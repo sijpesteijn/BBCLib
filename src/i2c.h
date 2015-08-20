@@ -23,9 +23,11 @@ typedef enum {
 typedef struct {
 	int fd;
 	i2c i2cnr;
+	int deviceAddress;
+	int openMode;
 } i2c_properties;
 
-int open_i2c(i2c_properties *i2c, int deviceAddress, int openMode);
+int open_i2c(i2c_properties *i2c);
 int write_byte_i2c(i2c_properties *i2c, unsigned char reg);
 int write_data_i2c(i2c_properties *i2c, unsigned char reg, char value);
 int read_i2c(i2c_properties *i2c, unsigned char *readBuffer, int bufferSize);
