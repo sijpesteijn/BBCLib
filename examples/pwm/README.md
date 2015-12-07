@@ -4,7 +4,7 @@ On the BeagleBone Black, we must enable pwm before we can use it.
 
 To enable the pwm port on the P9 header, gpio 22, we first should disable the on board hdmi port:
 Rev A/B: Open the file /media/BEAGLEBONE/uEnv.txt in an editor (vim/nano)
-Rev C: Open the file /boot/uboot/uEnv.txt in an editor (vim/nano)
+Rev C: Open the file /boot/uEnv.txt in an editor (vim/nano)
 Add the key "capemgr.disable_partno="
 Add the ports you want to enable, comma separated (BB-UART1, BB-UART2. BB-UART4, BB-UART5)
 Reboot

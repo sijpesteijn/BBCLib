@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 	printf("0 - all\n");
 
 //	unsigned char k = getchar();
-	int c = 11; // atoi(k);
+	int c = 10; // atoi(k);
 	if (c == 1 || c == 0)
 		onBoardLedsExample();
 	if (c == 2 || c == 0)

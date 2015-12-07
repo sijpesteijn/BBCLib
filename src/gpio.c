@@ -17,14 +17,14 @@ int gpio_open(gpio_properties *gpio) {
 		return 1;
 	}
 	char str[15];
-	sprintf(str, "%d", gpio);
+	sprintf(str, "%d", gpio->nr);
 	fputs(str, export);
 	fclose(export);
 	syslog (LOG_INFO, "gpio_open: set direction: %d, %d", gpio->nr, gpio->direction);
 	FILE *fd;
 	char buf[MAX_BUF];
 
-	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/direction", gpio);
+	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/direction", gpio->nr);
 	fd = fopen(buf, "w");
 	if (fd < 0) {
 		perror("gpio/direction");

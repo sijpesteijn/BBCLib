@@ -17,7 +17,7 @@
 #include <stdint.h>
 #include <syslog.h>
 #include <unistd.h>
-
+#include <sys/wait.h>
 
 #define SYSFS_GPIO_DIR "/sys/class/gpio"
 #define SLOTS	"/sys/devices/bone_capemgr.9/slots"
@@ -33,7 +33,7 @@ typedef struct {
 	char *file_name;
 } overlay;
 
-int init_bbc_lib();
-int load_device_tree_overlay(overlay* ol);
+extern int init_bbc_lib();
+extern int load_device_tree_overlay(overlay* ol);
 
 #endif /* CORE_H_ */

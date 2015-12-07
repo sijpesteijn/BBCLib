@@ -4,13 +4,17 @@ On the BeagleBone Black, it's only the /dev/ttyO0 that is enabled by default, an
 
 To enable the uarts 1,2,4 and/or 5 on the BeagleBone Black, rev A, B and C:
 Rev A/B: Open the file /media/BEAGLEBONE/uEnv.txt in an editor (vim/nano)
-Rev C: Open the file /boot/uboot/uEnv.txt in an editor (vim/nano)
-Add the key "capemgr.enable_partno="
+Rev C: Open the file /boot/uEnv.txt in an editor (vim/nano)
+Add the key "cape_enable="
 Add the ports you want to enable, comma separated (BB-UART1, BB-UART2. BB-UART4, BB-UART5)
+Add the key "cape_disable"
+And add the BB-BONELT-HDMI and BB-BONELT-HDMIN
 Reboot
 An example line looks like this:
-root@beaglebone:/dev# cat /media/BEAGLEBONE/uEnv.txt
-optargs=quiet drm.debug=7 capemgr.enable_partno=BB-UART4
+root@beaglebone:/dev# cat /boot/uEnv.txt
+cape_enable=capemgr.enable_partno=BB-UART1
+cape_disable=capemgr.disable_partno=BB-BONELT-HDMI,BB-BONELT-HDMIN
+
 
 After reboot, the device is present in the device list:
  root@beaglebone:/dev# ls -l /dev/ttyO*

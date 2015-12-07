@@ -21,9 +21,9 @@ typedef struct {
 	PIN_DIRECTION direction;
 } gpio_properties;
 
-int gpio_open(gpio_properties *gpio);
-int gpio_close(gpio_properties *gpio);
-int gpio_set_value(gpio_properties *gpio, int value);
-int gpio_get_value(gpio_properties *gpio);
-int gpio_set_edge(gpio_properties *gpio, char *edge);
+extern int gpio_open(gpio_properties *gpio);
+extern int gpio_close(gpio_properties *gpio);
+extern int gpio_set_value(gpio_properties *gpio, int value);
+extern int gpio_get_value(gpio_properties *gpio);
+extern int gpio_set_edge(gpio_properties *gpio, char *edge);
 #endif /* GPIO_H_ */

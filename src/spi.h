@@ -24,8 +24,9 @@ typedef struct {
 	uint8_t flags;
 } spi_properties;
 
-uint8_t spi_open(spi_properties* spi);
-uint8_t spi_send(spi_properties *spi, unsigned char tx[], int length);
-uint8_t spi_transfer(spi_properties *spi, unsigned char tx[], unsigned char rx[], int length);
-uint8_t spi_close(spi_properties *spi);
+extern uint8_t spi_open(spi_properties* spi);
+extern uint8_t spi_send(spi_properties *spi, unsigned char tx[], int length);
+extern uint8_t spi_transfer(spi_properties *spi, unsigned char tx[], unsigned char rx[], int length);
+extern uint8_t spi_close(spi_properties *spi);
+
 #endif /* SPI_H_ */

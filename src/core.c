@@ -163,17 +163,26 @@ int load_device_tree_overlay(overlay* ol) {
 	syslog(LOG_INFO, "Load device tree overlay: %s", ol->file_name);
 	if (is_device_tree_overlay_loaded(ol) == 0) {
 		syslog(LOG_INFO, "Loading device tree overlay: %s", ol->part_number);
-//		copyFile(ol->file_name, "/lib/firmware/BBCLIB-SPI0-00A0.dtbo");
-//		FILE *fd;
-//
-//		fd = fopen(slotsFilePath, "w");
-//		if (fd < 0) {
-//			perror("load_device_tree_overlay");
-//			return 1;
-//		}
-//
-//		fputs(ol->part_number, fd);
-//		fclose(fd);
+		int status;
+		pid_t pID = fork();
+		if (pID == 0) {               // child
+		   char cmd[100] = "echo ";
+		   strcat(cmd, ol->file_name);
+		   strcat(cmd, " > ");
+		   strcat(cmd, slotsFilePath);
+		   char *name[] = {
+		        "/bin/bash",
+		        "-c",
+				cmd,
+		        NULL
+		    };
+		   chdir("/lib/firmware/");
+		   execvp(name[0], name);
+		   usleep(50000);
+		   exit(EXIT_SUCCESS);
+		}
+		wait(&status);
+
 	} else {
 		syslog(LOG_INFO, "Device tree overlay %s already loaded",
 				ol->part_number);
@@ -182,16 +191,23 @@ int load_device_tree_overlay(overlay* ol) {
 }
 
 int unload_device_tree_overlay(int slot_nr) {
-	FILE *fd;
-
-	fd = fopen(slotsFilePath, "w");
-	if (fd < 0) {
-		perror("unload_device_tree_overlay");
-		return 1;
-	}
-
-	fprintf(fd, "-%i", slot_nr);
-	fclose(fd);
+	pid_t pID = fork();
+	if (pID == 0) {               // child
+	   char cmd[100] = "echo ";
+	   char nr[5];
+	   sprintf(nr, "-%d", slot_nr);
+	   strcat(cmd, nr);
+	   strcat(cmd, " > ");
+	   strcat(cmd, slotsFilePath);
+	   char *name[] = {
+	        "/bin/bash",
+	        "-c",
+			cmd,
+	        NULL
+	    };
+	   chdir("/lib/firmware/");
+	   execvp(name[0], name);
+   }
 
 	return 0;
 }

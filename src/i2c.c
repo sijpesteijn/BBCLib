@@ -53,7 +53,7 @@ int write_data_i2c(i2c_properties *i2c, unsigned char reg, char value) {
 	unsigned char buf[2];
 	buf[0] = reg;
 	buf[1] = value;
-	if (write(i2c->i2cnr, buf, 2) != 2) {
+	if (write(i2c->fd, buf, 2) != 2) {
 		syslog(LOG_ERR,
 				"Warning - write data failed, filename=%i, register=%i\n", i2c->fd,
 				reg);

@@ -23,8 +23,9 @@ typedef struct {
 	int baudrate;
 } uart_properties;
 
-int uart_open(uart_properties *uart);
-int uart_send(uart_properties *uart, char *tx, int length);
-int uart_read(uart_properties *uart,unsigned char *rx, int length);
-int uart_close(uart_properties *uart);
+extern int uart_open(uart_properties *uart);
+extern int uart_send(uart_properties *uart, char *tx, int length);
+extern int uart_read(uart_properties *uart,unsigned char *rx, int length);
+extern int uart_close(uart_properties *uart);
+
 #endif /* UART_H_ */

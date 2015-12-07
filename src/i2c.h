@@ -27,10 +27,9 @@ typedef struct {
 	int openMode;
 } i2c_properties;
 
-int open_i2c(i2c_properties *i2c);
-int write_byte_i2c(i2c_properties *i2c, unsigned char reg);
-int write_data_i2c(i2c_properties *i2c, unsigned char reg, char value);
-int read_i2c(i2c_properties *i2c, unsigned char *readBuffer, int bufferSize);
-
+extern int open_i2c(i2c_properties *i2c);
+extern int write_byte_i2c(i2c_properties *i2c, unsigned char reg);
+extern int write_data_i2c(i2c_properties *i2c, unsigned char reg, char value);
+extern int read_i2c(i2c_properties *i2c, unsigned char *readBuffer, int bufferSize);
 
 #endif /* I2C_H_ */

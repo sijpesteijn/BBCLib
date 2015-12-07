@@ -16,10 +16,9 @@ typedef struct {
 } pwm_properties;
 
 
-int pwm_open(pwm_properties *pwm);
-int pwm_set_run(pwm_properties *pwm, int run);
-int pwm_set_period(pwm_properties *pwm, int period);
-int pwm_set_duty(pwm_properties *pwm, int duty);
-
+extern int pwm_open(pwm_properties *pwm);
+extern int pwm_set_run(pwm_properties *pwm, int run);
+extern int pwm_set_period(pwm_properties *pwm, int period);
+extern int pwm_set_duty(pwm_properties *pwm, int duty);
 
 #endif /* PWM_H_ */
