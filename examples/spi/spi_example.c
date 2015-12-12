@@ -32,8 +32,8 @@ int spiMCP23S08Example() {
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
 	spi->bits_per_word = 8;
-	spi->mode = 3;
-	spi->speed = 2000000;
+	spi->mode = 0;
+	spi->speed = 10000000;
 	spi->flags = O_RDWR;
 
 	uint8_t isOpen = spi_open(spi);
@@ -49,12 +49,15 @@ int spiMCP23S08Example() {
 					perror("Failed to update the display");
 					return -1;
 				}
-				printf("%4d\r", mcp23s08_gpios[2]);
-				fflush(stdout);       //need to flush the output, no \n
 				usleep(100000);       //sleep for 100ms each loop
 				mcp23s08_gpios[2] = mcp23s08_gpios[2] << 1;
 			}
 			mcp23s08_gpios[2] = 0x01;
+		}
+		mcp23s08_gpios[2] = 0x00;
+		if (spi_send(spi, mcp23s08_gpios, sizeof(mcp23s08_gpios)) == -1) {
+			perror("Failed to update the display");
+			return -1;
 		}
 		spi_close(spi);
 	}
