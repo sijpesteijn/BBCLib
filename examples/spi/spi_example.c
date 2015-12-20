@@ -76,7 +76,6 @@ int spiADXL345Example() {
 	unsigned char adxl345_setup[] = {};
 	unsigned char receive[6];
 	signed short data[3];
-//	float x, y, z;
 
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
@@ -111,11 +110,10 @@ int spiADXL345Example() {
 	return 0;
 }
 
-void setOutput(spi_properties *spi, unsigned char reg, unsigned char value) {
+void write8Bits(spi_properties *spi, unsigned char reg, unsigned char value) {
 	unsigned char data[2] = {};
 	data[0] = reg | ((value & 0xf0) >> 4);
 	data[1] = (value & 0x0f) << 4;
-	syslog(LOG_INFO, "Output: 0x%02x 0x%02x\n", data[0], data[1]);
 	if (spi_send(spi, data, sizeof(data)) == -1) {
 		perror("Failed to update output.");
 	}
@@ -125,13 +123,10 @@ void setOutput(spi_properties *spi, unsigned char reg, unsigned char value) {
  * MCP4902 is a 8-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface.
  * This example will increase the output for A untill the maximum and then decrease to the minimum 10 times.
  * Output B will reflect the inverse of output A.
+ * 255
  */
 int spiMCP4902Example() {
 	setup();
-
-	gpio_properties *gpio = malloc(sizeof(gpio_properties));
-	gpio->nr = LEDGPIO;
-	gpio->direction = OUTPUT_PIN;
 
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
@@ -142,144 +137,233 @@ int spiMCP4902Example() {
 
 	int delay = 1000;
 
-	uint8_t isGpioOpen = gpio_open(gpio);
 	uint8_t isSpiOpen = spi_open(spi);
-	if (isGpioOpen == 0 && isSpiOpen == 0) {
-		syslog(LOG_INFO,"FD: %i", spi->fd);
-		gpio_set_value(gpio, 0);
+	if (isSpiOpen == 0) {
 
 		int i = 0;
+		unsigned char value = 0x00;
 		while(i++ < 10) {
-			unsigned char value = 0x00;
 			while(value < 0xff) {
-				setOutput(spi, 0x70, value);
-				setOutput(spi, 0xf0, ~value);
+				write8Bits(spi, 0x70, value);
+				write8Bits(spi, 0xf0, ~value);
 				usleep(delay);
 				value = value + 1;
 			}
 			while(value > 0x00) {
 				value = value - 1;
-				setOutput(spi, 0x70, value);
-				setOutput(spi, 0xf0, ~value);
+				write8Bits(spi, 0x70, value);
+				write8Bits(spi, 0xf0, ~value);
 				usleep(delay);
 			}
 		}
+		write8Bits(spi, 0x70, 0);
+		write8Bits(spi, 0xf0, 0);
 	}
-	free(gpio);
 	free(spi);
-	return 1;
+	syslog(LOG_INFO, "%s", "Finished spi example.");
+	return 0;
+}
+
+void write10Bits(spi_properties *spi, unsigned char reg, unsigned short value) {
+	unsigned char data[2] = {};
+	data[0] = reg | ((value & 0xff00) >> 6);
+	data[1] = (value & 0x00ff);
+	if (spi_send(spi, data, sizeof(data)) == -1) {
+		perror("Failed to update output.");
+	}
 }
 
 /*
  * MCP4912 is a 10-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface.
  * This example will increase the output for A untill the maximum and then decrease to the minimum 10 times.
  * Output B will reflect the inverse of output A.
+ * 1024
  */
 int spiMCP4912Example() {
 	setup();
 
-	gpio_properties *gpio = malloc(sizeof(gpio_properties));
-	gpio->nr = LEDGPIO;
-	gpio->direction = OUTPUT_PIN;
-
-	unsigned char regA = 0x70;
-	unsigned char regB = 0xB0;
-	unsigned char dataA[2] = {};
-	unsigned char dataB[2] = {};
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
 	spi->bits_per_word = 8;
 	spi->mode = 3;
-	spi->speed = 500000;
+	spi->speed = 2400000;
 	spi->flags = O_RDWR;
 
-	uint8_t isOpen = gpio_open(gpio) && spi_open(spi);
+	int delay = 1000;
 
-	if (isOpen == 0) {
+	uint8_t isSpiOpen = spi_open(spi);
+	if (isSpiOpen == 0) {
+
 		int i = 0;
 		while(i++ < 10) {
-			unsigned char lvalue = 0x00;
-			unsigned char hvalue = 0x00;
-			int j = 0;
-			while(j++ < 1024) {
-				unsigned char LSB = (((lvalue & 0xf0) >> 2) & 0xf0) >> 4;
-				dataA[0] = LSB | (hvalue << 2) | regA;
-				dataA[1] = (lvalue << 2) & 0xff;
-				dataB[0] = LSB | (~hvalue << 2) | regB;
-				dataB[1] = (~lvalue << 2) & 0xff;
-				if (lvalue == 0xff) {
-					hvalue = hvalue + 1;
-				}
-				gpio_set_value(gpio, 1);
-				if (spi_transfer(spi, dataA, 0x00, sizeof(dataA)) == -1) {
-					perror("Failed to update output A");
-					return -1;
-				}
-				if (spi_transfer(spi, dataB, 0x00, sizeof(dataB)) == -1) {
-					perror("Failed to update output B");
-					return -1;
-				}
-				gpio_set_value(gpio, 0);
-				usleep(100000);
-				lvalue = lvalue + 1;
+			unsigned short value = 0x0000;
+			while(value < 0x03ff) {
+				write10Bits(spi, 0x70, value);
+				write10Bits(spi, 0xf0, ~value);
+				usleep(delay);
+				value = value + 1;
+			}
+			while(value > 0x00) {
+				value = value - 1;
+				write10Bits(spi, 0x70, value);
+				write10Bits(spi, 0xf0, ~value);
+				usleep(delay);
 			}
 		}
+		write10Bits(spi, 0x70, 0);
+		write10Bits(spi, 0xf0, 0);
 	}
-	free(gpio);
 	free(spi);
-	return 1;
+	syslog(LOG_INFO, "%s", "Finished spi example.");
+	return 0;
+}
+
+void write12Bits(spi_properties *spi, unsigned char reg, unsigned short value) {
+	unsigned char data[2] = {};
+	data[0] = reg | ((value & 0xff00) >> 8);
+	data[1] = (value & 0x00ff);
+	if (spi_send(spi, data, sizeof(data)) == -1) {
+		perror("Failed to update output.");
+	}
 }
 
 /*
- * MCP4912 is a 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface.
+ * MCP4922 is a 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface.
  * This example will increase the output for A untill the maximum and then decrease to the minimum 10 times.
  * Output B will reflect the inverse of output A.
+ * 4096
  */
 int spiMCP4922Example() {
 	setup();
-	gpio_properties *gpio = malloc(sizeof(gpio_properties));
-	gpio->nr = LEDGPIO;
-	gpio->direction = OUTPUT_PIN;
 
-	unsigned char regA = 0x70;
-	unsigned char regB = 0xB0;
-	unsigned char dataA[2] = {};
-	unsigned char dataB[2] = {};
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
 	spi->bits_per_word = 8;
 	spi->mode = 3;
-	spi->speed = 500000;
+	spi->speed = 2400000;
+	spi->flags = O_RDWR;
+
+	int delay = 1000;
+
+	uint8_t isSpiOpen = spi_open(spi);
+	if (isSpiOpen == 0) {
+
+		int i = 0;
+		unsigned short value = 0;
+		while(i++ < 10) {
+			while(value < 4096) {
+				write12Bits(spi, 0x70, value);
+				write12Bits(spi, 0xf0, ~value);
+				usleep(delay);
+				value = value + 1;
+			}
+			while(value > 0) {
+				value = value - 1;
+				write12Bits(spi, 0x70, value);
+				write12Bits(spi, 0xf0, ~value);
+				usleep(delay);
+			}
+		}
+		write10Bits(spi, 0x70, 0);
+		write10Bits(spi, 0xf0, 0);
+	}
+	free(spi);
+	syslog(LOG_INFO, "%s", "Finished spi example.");
+	return 0;
+}
+
+void dprint(unsigned char value) {
+	syslog(LOG_INFO, "0x%02x", value);
+}
+
+int send(spi_properties *spi, unsigned char value) {
+	unsigned char mcp23s08_gpios[] = { 0x40, 0x09, 0x00, };
+	mcp23s08_gpios[2] = value;
+//	dprint(value);
+	spi_send(spi, mcp23s08_gpios, sizeof(mcp23s08_gpios));
+//	usleep(10000);
+	return 1;
+}
+
+int send_byte(spi_properties *spi, unsigned char value) {
+	int bit_position = 8;
+	while(bit_position > 0) {
+		unsigned char bit_to_send = (value & 0x80) >> 5;
+//		dprint(bit_to_send);
+		unsigned char clkdata = (0x00 | bit_to_send);
+		send(spi, clkdata);
+		clkdata = (0x02 | bit_to_send);
+		send(spi, clkdata);
+		bit_position--;
+		value = value << 1;
+	}
+	return 1;
+}
+int spiMC23S08_MCP4902Example() {
+	unsigned char mcp23s08_setup[] = { 0x40, 0x00, 0x00, };
+
+	setup();
+
+	spi_properties *spi = malloc(sizeof(spi_properties));
+	spi->spi_id = spi0;
+	spi->bits_per_word = 8;
+	spi->mode = 0;
+	spi->speed = 10000000;
 	spi->flags = O_RDWR;
 
 	uint8_t isOpen = spi_open(spi);
 
 	if (isOpen == 0) {
-		int i = 0;
-		while(i++ < 10) {
-			unsigned char value = 0x00;
-			int j = 0;
-			while(j++ < 4096) {
-				dataA[0] = regA | ((value & 0xf0) >> 4);
-				dataA[1] = value;
-				dataB[0] = regB | ((~value & 0xf0) >> 4);
-				dataB[1] = ~value;
-				gpio_set_value(gpio, 1);
-				if (spi_send(spi, dataA, sizeof(dataA)) == -1) {
-					perror("Failed to update output A");
-					return -1;
-				}
-				if (spi_send(spi, dataB, sizeof(dataB)) == -1) {
-					perror("Failed to update output B");
-					return -1;
-				}
-				gpio_set_value(gpio, 0);
-				usleep(10000);
-				value = value + 1;
-			}
-		}
+		spi_send(spi, mcp23s08_setup, sizeof(mcp23s08_setup));
+
+		unsigned char data[2] = {};
+		data[0] = 0xff;
+		data[1] = 0xf0;
+
+		send(spi, 0x07);
+		send(spi, 0x06);
+		send(spi, 0x02);
+		send(spi, 0x00);
+		send_byte(spi, data[0]);
+		send_byte(spi, data[1]);
+		send(spi, 0x06);
+		send(spi, 0x07);
+	}
+
+	free(spi);
+	syslog(LOG_INFO, "%s", "Finished spi example.");
+	return 0;
+}
+
+/*
+ * MCP4902 is a 8-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface.
+ * This example will increase the output for A untill the maximum and then decrease to the minimum 10 times.
+ * Output B will reflect the inverse of output A.
+ * 255
+ */
+int spiMCP4902Example2() {
+	setup();
+
+	spi_properties *spi = malloc(sizeof(spi_properties));
+	spi->spi_id = spi0;
+	spi->bits_per_word = 8;
+	spi->mode = 3;
+	spi->speed = 2400000;
+	spi->flags = O_RDWR;
+
+	int delay = 500;
+
+	uint8_t isSpiOpen = spi_open(spi);
+	if (isSpiOpen == 0) {
+
+		unsigned char value = 0x01;
+		write8Bits(spi, 0x70, value);
+		write8Bits(spi, 0xf0, ~value);
+//		usleep(delay);
+		write8Bits(spi, 0x70, 0);
+		write8Bits(spi, 0xf0, 0);
 	}
 	free(spi);
-	free(gpio);
-	return 1;
+	syslog(LOG_INFO, "%s", "Finished spi example.");
+	return 0;
 }

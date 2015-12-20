@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 	printf("0 - all\n");
 
 //	unsigned char k = getchar();
-	int c = 5; // atoi(k);
+	int c = 14; // atoi(k);
 	if (c == 1 || c == 0)
 		onBoardLedsExample();
 	if (c == 2 || c == 0)
@@ -44,12 +44,21 @@ int main(int argc, char **argv) {
 	if (c == 7 || c == 0)
 		spiMCP4902Example();
 	if (c == 8 || c == 0)
-		i2c8x8LedMatrix();
+		spiMCP4912Example();
 	if (c == 9 || c == 0)
-		i2cADXL345();
+		spiMCP4922Example();
 	if (c == 10 || c == 0)
-		uartExample();
+		i2c8x8LedMatrix();
 	if (c == 11 || c == 0)
+		i2cADXL345();
+	if (c == 12 || c == 0)
+		uartExample();
+	if (c == 13 || c == 0)
 		pwmExample();
+	if (c == 14 || c == 0)
+		spiMC23S08_MCP4902Example();
+	if (c == 15 || c == 0)
+		spiMCP4902Example2();
+
 	return 0;
 }
