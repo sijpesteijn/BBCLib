@@ -264,8 +264,8 @@ int spiMCP4922Example() {
 				usleep(delay);
 			}
 		}
-		write10Bits(spi, 0x70, 0);
-		write10Bits(spi, 0xf0, 0);
+		write12Bits(spi, 0x70, 0);
+		write12Bits(spi, 0xf0, 0);
 	}
 	free(spi);
 	syslog(LOG_INFO, "%s", "Finished spi example.");
@@ -276,29 +276,45 @@ void dprint(unsigned char value) {
 	syslog(LOG_INFO, "0x%02x", value);
 }
 
-int send(spi_properties *spi, unsigned char value) {
+int set_MCP23S08_GPIO_values(spi_properties *spi, unsigned char value) {
 	unsigned char mcp23s08_gpios[] = { 0x40, 0x09, 0x00, };
 	mcp23s08_gpios[2] = value;
 //	dprint(value);
 	spi_send(spi, mcp23s08_gpios, sizeof(mcp23s08_gpios));
-//	usleep(10000);
 	return 1;
 }
 
-int send_byte(spi_properties *spi, unsigned char value) {
+int send_MCP49x2_values(spi_properties *spi, unsigned char value) {
 	int bit_position = 8;
 	while(bit_position > 0) {
-		unsigned char bit_to_send = (value & 0x80) >> 5;
+		unsigned char bit_to_send = (value & 0x80) >> 2;
 //		dprint(bit_to_send);
-		unsigned char clkdata = (0x00 | bit_to_send);
-		send(spi, clkdata);
-		clkdata = (0x02 | bit_to_send);
-		send(spi, clkdata);
+		unsigned char clkdata = bit_to_send;
+		set_MCP23S08_GPIO_values(spi, clkdata);
+		clkdata = (MCP23S08_SCK | bit_to_send);
+		set_MCP23S08_GPIO_values(spi, clkdata);
 		bit_position--;
 		value = value << 1;
 	}
 	return 1;
 }
+
+void set_MCP49x2(unsigned char data[2], unsigned char chip, spi_properties* spi) {
+	set_MCP23S08_GPIO_values(spi, chip | MCP23S08_SCK | MCP23S08_SDI);
+	set_MCP23S08_GPIO_values(spi, MCP23S08_SCK | MCP23S08_SDI);
+	set_MCP23S08_GPIO_values(spi, MCP23S08_SDI);
+	set_MCP23S08_GPIO_values(spi, MCP23S08_ALL_DOWN);
+	send_MCP49x2_values(spi, data[0]);
+	send_MCP49x2_values(spi, data[1]);
+	set_MCP23S08_GPIO_values(spi, MCP23S08_SCK | MCP23S08_SDI);
+	set_MCP23S08_GPIO_values(spi, chip | MCP23S08_SCK | MCP23S08_SDI);
+}
+
+void setData(unsigned char *data, unsigned char reg, unsigned short value) {
+	data[0] = reg | ((value & 0xf0) >> 4);
+	data[1] = (value & 0x0f) << 4;
+}
+
 int spiMC23S08_MCP4902Example() {
 	unsigned char mcp23s08_setup[] = { 0x40, 0x00, 0x00, };
 
@@ -317,52 +333,35 @@ int spiMC23S08_MCP4902Example() {
 		spi_send(spi, mcp23s08_setup, sizeof(mcp23s08_setup));
 
 		unsigned char data[2] = {};
-		data[0] = 0xff;
-		data[1] = 0xf0;
-
-		send(spi, 0x07);
-		send(spi, 0x06);
-		send(spi, 0x02);
-		send(spi, 0x00);
-		send_byte(spi, data[0]);
-		send_byte(spi, data[1]);
-		send(spi, 0x06);
-		send(spi, 0x07);
+		int delay = 1000;
+		int i = 0;
+		while(i++ < 10) {
+			unsigned short value = 0x0000;
+			while(value < 0xff) {
+				setData(data, 0x70, value);
+				set_MCP49x2(data, MCP4902_1_CS, spi);
+				setData(data, 0xf0, ~value);
+				set_MCP49x2(data, MCP4902_1_CS, spi);
+				usleep(delay);
+				value = value + 1;
+			}
+			while(value > 0x00) {
+				value = value - 1;
+				setData(data, 0x70, value);
+				set_MCP49x2(data, MCP4902_1_CS, spi);
+				setData(data, 0xf0, ~value);
+				set_MCP49x2(data, MCP4902_1_CS, spi);
+				usleep(delay);
+			}
+		}
+		data[0] = 0x70;
+		data[1] = 0x00;
+		set_MCP49x2(data, MCP4902_1_CS, spi);
+		data[0] = 0xf0;
+		data[1] = 0x00;
+		set_MCP49x2(data, MCP4902_1_CS, spi);
 	}
 
-	free(spi);
-	syslog(LOG_INFO, "%s", "Finished spi example.");
-	return 0;
-}
-
-/*
- * MCP4902 is a 8-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface.
- * This example will increase the output for A untill the maximum and then decrease to the minimum 10 times.
- * Output B will reflect the inverse of output A.
- * 255
- */
-int spiMCP4902Example2() {
-	setup();
-
-	spi_properties *spi = malloc(sizeof(spi_properties));
-	spi->spi_id = spi0;
-	spi->bits_per_word = 8;
-	spi->mode = 3;
-	spi->speed = 2400000;
-	spi->flags = O_RDWR;
-
-	int delay = 500;
-
-	uint8_t isSpiOpen = spi_open(spi);
-	if (isSpiOpen == 0) {
-
-		unsigned char value = 0x01;
-		write8Bits(spi, 0x70, value);
-		write8Bits(spi, 0xf0, ~value);
-//		usleep(delay);
-		write8Bits(spi, 0x70, 0);
-		write8Bits(spi, 0xf0, 0);
-	}
 	free(spi);
 	syslog(LOG_INFO, "%s", "Finished spi example.");
 	return 0;

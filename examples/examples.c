@@ -57,8 +57,6 @@ int main(int argc, char **argv) {
 		pwmExample();
 	if (c == 14 || c == 0)
 		spiMC23S08_MCP4902Example();
-	if (c == 15 || c == 0)
-		spiMCP4902Example2();
 
 	return 0;
 }
