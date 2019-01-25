@@ -8,6 +8,7 @@
 #include "onboardleds.h"
 
 void getLedTrigger(led_info *led) {
+	printf("Get Led trigger %d", led->lednr);
 	FILE *fd;
 	int i, j = 0, start, end;
 	char buf[BUF_SIZE];
@@ -36,6 +37,7 @@ void getLedTrigger(led_info *led) {
 }
 
 void setLedTrigger(led_info *led, char *value) {
+	printf("Set Led trigger %d", led->lednr);
 	FILE *fd;
 	char buf[BUF_SIZE];
 	snprintf(buf, sizeof(buf), leddir "trigger", led->lednr);
