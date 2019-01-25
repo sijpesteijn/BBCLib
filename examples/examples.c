@@ -29,33 +29,33 @@ int main(int argc, char **argv) {
 
 	 int c = getchar();
 	 printf("Nr %d", c);
-	if (c == 1 || c == 0)
+	if (c == 49 || c == 48)
 		onBoardLedsExample();
-	if (c == 2 || c == 0)
+	if (c == 50 || c == 48)
 		gpioLedExample();
-	if (c == 3 || c == 0)
+	if (c == 51 || c == 48)
 		gpioInputExample();
-	if (c == 4 || c == 0)
+	if (c == 52 || c == 48)
 		gpioInputLedExample();
-	if (c == 5 || c == 0)
+	if (c == 53 || c == 48)
 		spiMCP23S08Example();
-	if (c == 6 || c == 0)
+	if (c == 54 || c == 48)
 		spiADXL345Example();
-	if (c == 7 || c == 0)
+	if (c == 55 || c == 48)
 		spiMCP4902Example();
-	if (c == 8 || c == 0)
+	if (c == 56 || c == 48)
 		spiMCP4912Example();
-	if (c == 9 || c == 0)
+	if (c == 57 || c == 48)
 		spiMCP4922Example();
-	if (c == 10 || c == 0)
+	if (c == 58 || c == 48)
 		i2c8x8LedMatrix();
-	if (c == 11 || c == 0)
+	if (c == 59 || c == 48)
 		i2cADXL345();
-	if (c == 12 || c == 0)
+	if (c == 60 || c == 48)
 		uartExample();
-	if (c == 13 || c == 0)
+	if (c == 61 || c == 48)
 		pwmExample();
-	if (c == 14 || c == 0)
+	if (c == 62 || c == 48)
 		spiMC23S08_MCP4902Example();
 
 	return 0;
