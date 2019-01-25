@@ -27,8 +27,8 @@ int main(int argc, char **argv) {
 	printf("9 - i2c ADXL345\n");
 	printf("0 - all\n");
 
-//	unsigned char k = getchar();
-	int c = 14; // atoi(k);
+	unsigned char k = getchar();
+	int c = atoi(k);
 	if (c == 1 || c == 0)
 		onBoardLedsExample();
 	if (c == 2 || c == 0)
