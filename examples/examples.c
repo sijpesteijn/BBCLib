@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
 	printf("0 - all\n");
 
 	 int c = getchar();
+	 printf("Nr %d", c);
 	if (c == 1 || c == 0)
 		onBoardLedsExample();
 	if (c == 2 || c == 0)
