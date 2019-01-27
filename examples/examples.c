@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 	char c[100];
 	scanf("%s" , c) ;
 //	gets( str );
-	 printf("Nr %s", c);
+	 printf("Nr %s\n", c);
 	if (strcmp(c,"1") == 0) {
 		printf("On board leds.\n");
 		onBoardLedsExample();

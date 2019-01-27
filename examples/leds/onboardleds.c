@@ -191,8 +191,11 @@ int onBoardLedsExample() {
 	led2->lednr = 2;
 	led3->lednr = 3;
 
+	printf("Hier\n");
 	saveState();
+	printf("Hier\n");
 	clearLeds();
+	printf("Hier\n");
 	walker();
 	filler();
 	shader();
