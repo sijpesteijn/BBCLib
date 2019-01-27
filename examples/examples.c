@@ -29,10 +29,10 @@ int main(int argc, char **argv) {
 
 //	 int c = getchar();
 
-	char str[100];
-	scanf("%s" , str) ;
+	char c[100];
+	scanf("%s" , c) ;
 //	gets( str );
-	 printf("Nr %s", str);
+	 printf("Nr %s", c);
 	if (c == "1" || c == "0")
 		onBoardLedsExample();
 //	if (c == 50 || c == 48)
