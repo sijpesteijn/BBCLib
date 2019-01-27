@@ -27,14 +27,14 @@ int main(int argc, char **argv) {
 	printf("9 - i2c ADXL345\n");
 	printf("0 - all\n");
 
-	 int c = getchar();
+//	 int c = getchar();
 
 	char str[100];
 	scanf("%s" , str) ;
 //	gets( str );
 	 printf("Nr %s", str);
-//	if (c == 49 || c == 48)
-//		onBoardLedsExample();
+	if (c == "1" || c == "0")
+		onBoardLedsExample();
 //	if (c == 50 || c == 48)
 //		gpioLedExample();
 //	if (c == 51 || c == 48)
