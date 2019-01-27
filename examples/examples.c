@@ -35,11 +35,12 @@ int main(int argc, char **argv) {
 	if (strcmp(c,"1") == 0) {
 		printf("On board leds.\n");
 		onBoardLedsExample();
+	} else if (strcmp(c,"2") == 0) {
+		gpioLedExample();
+	} else if (strcmp(c, "3") == 0) {
+		gpioInputExample();
 	}
-//	if (c == 50 || c == 48)
-//		gpioLedExample();
 //	if (c == 51 || c == 48)
-//		gpioInputExample();
 //	if (c == 52 || c == 48)
 //		gpioInputLedExample();
 //	if (c == 53 || c == 48)
