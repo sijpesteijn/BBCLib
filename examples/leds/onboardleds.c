@@ -72,6 +72,7 @@ void setLedBrightness(led_info *led, int value) {
 }
 
 void saveState() {
+	printf("Save state");
 	getLedTrigger(led0);
 	getLedBrightness(led0);
 	getLedTrigger(led1);
