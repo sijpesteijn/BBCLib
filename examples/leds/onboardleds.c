@@ -74,13 +74,13 @@ void setLedBrightness(led_info *led, int value) {
 void saveState() {
 	printf("Save state");
 	getLedTrigger(led0);
-//	getLedBrightness(led0);
-//	getLedTrigger(led1);
-//	getLedBrightness(led1);
-//	getLedTrigger(led2);
-//	getLedBrightness(led2);
-//	getLedTrigger(led3);
-//	getLedBrightness(led3);
+	getLedBrightness(led0);
+	getLedTrigger(led1);
+	getLedBrightness(led1);
+	getLedTrigger(led2);
+	getLedBrightness(led2);
+	getLedTrigger(led3);
+	getLedBrightness(led3);
 }
 
 void resetState() {
