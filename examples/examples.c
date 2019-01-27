@@ -25,7 +25,6 @@ int main(int argc, char **argv) {
 	printf("7 - spi MCP4902\n");
 	printf("8 - i2c 8x8 Led Matrix\n");
 	printf("9 - i2c ADXL345\n");
-	printf("0 - all\n");
 
 //	 int c = getchar();
 
@@ -33,8 +32,10 @@ int main(int argc, char **argv) {
 	scanf("%s" , c) ;
 //	gets( str );
 	 printf("Nr %s", c);
-//	if (strcmp(c,"1") == 0 || strcmp(c,"0") == 0)
-//		onBoardLedsExample();
+	if (strcmp(c,"1") == 0) {
+		printf("On board leds.\n");
+		onBoardLedsExample();
+	}
 //	if (c == 50 || c == 48)
 //		gpioLedExample();
 //	if (c == 51 || c == 48)
