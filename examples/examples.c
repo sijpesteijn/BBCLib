@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 	scanf("%s" , c) ;
 //	gets( str );
 	 printf("Nr %s", c);
-	if (c == "1" || c == "0")
+	if (strcmp(c,"1") == 0 || strcmp(c,"0") == 0)
 		onBoardLedsExample();
 //	if (c == 50 || c == 48)
 //		gpioLedExample();
