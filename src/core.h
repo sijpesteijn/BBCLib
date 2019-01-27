@@ -13,9 +13,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dirent.h>
+//#include <dirent.h>
 #include <stdint.h>
-#include <syslog.h>
+//#include <syslog.h>
 #include <unistd.h>
 #include <sys/wait.h>
 

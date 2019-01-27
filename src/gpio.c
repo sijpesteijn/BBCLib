@@ -5,6 +5,7 @@
  *      Author: gijs
  */
 
+#include <syslog.h>
 #include "core.h"
 #include "gpio.h"
 
@@ -55,7 +56,7 @@ int gpio_close(gpio_properties *gpio) {
 }
 
 int gpio_set_value(gpio_properties *gpio, int value) {
-	syslog (LOG_INFO, "gpio set value: %d, %d", gpio->nr, value);
+    log::debug(string("gpio set value: %d, %d", gpio->nr, value));
 	FILE *fd;
 	char buf[MAX_BUF];
 
@@ -76,7 +77,7 @@ int gpio_set_value(gpio_properties *gpio, int value) {
 }
 
 int gpio_get_value(gpio_properties *gpio) {
-	syslog (LOG_INFO, "gpio get value: %d", gpio->nr);
+    log::debug(string("gpio get value: %d", gpio->nr));
 	int value;
 	FILE *fd;
 	char buf[MAX_BUF];
@@ -102,7 +103,7 @@ int gpio_get_value(gpio_properties *gpio) {
 }
 
 int gpio_set_edge(gpio_properties *gpio, char *edge) {
-	syslog (LOG_INFO, "gpio set edge: %d, %s", gpio->nr, edge);
+    log::debug(string("gpio set edge: %d, %s", gpio->nr, edge));
 	FILE *fd;
 	char buf[MAX_BUF];
 

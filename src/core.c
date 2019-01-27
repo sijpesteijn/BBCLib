@@ -5,6 +5,7 @@
  *      Author: gijs
  */
 
+#include <syslog.h>
 #include "core.h"
 
 char* slotsFilePath;
@@ -215,7 +216,6 @@ int unload_device_tree_overlay(int slot_nr) {
 int init_bbc_lib() {
 	openlog("BBCLib", LOG_PID | LOG_CONS | LOG_NDELAY | LOG_NOWAIT, LOG_LOCAL0);
 	syslog(LOG_INFO, "%s", "Starting BBCLib");
-	slotsFilePath = "/sys/devices/bone_capemgr.9/slots";
 	return 0;
 }
 

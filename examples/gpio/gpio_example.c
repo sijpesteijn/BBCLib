@@ -29,7 +29,7 @@ int gpioLedExample() {
 		gpio_close(gpio);
 	}
 	free(gpio);
-	syslog(LOG_INFO, "%s", "Finished gpio led example.");
+    log::debug("Finished gpio led example.");
 	return 0;
 }
 
@@ -54,7 +54,7 @@ int gpioInputExample() {
 		}
 		gpio_close(gpio);
 	}
-	syslog(LOG_INFO, "%s", "Finished gpio input example.");
+    log::debug("Finished gpio input example.");
 	return 0;
 }
 
@@ -87,6 +87,6 @@ int gpioInputLedExample() {
 	}
 	free(led);
 	free(button);
-	syslog(LOG_INFO, "%s", "Finished gpio input led example.");
+    log::debug("Finished gpio input led example.");
 	return 0;
 }

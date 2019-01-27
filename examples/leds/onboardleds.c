@@ -5,10 +5,11 @@
  *      Author: gijs
  */
 
+#include <syslog.h>
 #include "onboardleds.h"
 
 void getLedTrigger(led_info *led) {
-	printf("Get Led trigger %d", led->lednr);
+//	printf("Get Led trigger %d", led->lednr);
 	FILE *fd;
 	int i, j = 0, start, end;
 	char buf[BUF_SIZE];
@@ -37,7 +38,7 @@ void getLedTrigger(led_info *led) {
 }
 
 void setLedTrigger(led_info *led, char *value) {
-	printf("Set Led trigger %d", led->lednr);
+//	printf("Set Led trigger %d", led->lednr);
 	FILE *fd;
 	char buf[BUF_SIZE];
 	snprintf(buf, sizeof(buf), leddir "trigger", led->lednr);
@@ -72,7 +73,7 @@ void setLedBrightness(led_info *led, int value) {
 }
 
 void saveState() {
-	printf("Save state");
+//	printf("Save state");
 	getLedTrigger(led0);
 	getLedBrightness(led0);
 	getLedTrigger(led1);
@@ -192,11 +193,8 @@ int onBoardLedsExample() {
 	led2->lednr = 2;
 	led3->lednr = 3;
 
-	printf("Hier\n");
 	saveState();
-	printf("Hier\n");
 	clearLeds();
-	printf("Hier\n");
 	walker();
 	filler();
 	shader();
