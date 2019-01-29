@@ -6,6 +6,8 @@
  */
 
 #include <syslog.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "onboardleds.h"
 #include "../../src/log.h"
 
