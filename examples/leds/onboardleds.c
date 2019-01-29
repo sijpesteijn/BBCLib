@@ -12,13 +12,13 @@
 #include "../../src/log.h"
 
 void getLedTrigger(led_info *led) {
+	printf(leddir);
 //	printf("Get Led trigger %d", led->lednr);
 	FILE *fd;
 	int i, j = 0, start, end;
 	char buf[BUF_SIZE];
 	snprintf(buf, sizeof(buf), leddir "trigger", led->lednr);
 
-	printf(buf);
 	fd = fopen(buf, "r");
 	if (fd < 0) {
 		perror("led/trigger");
