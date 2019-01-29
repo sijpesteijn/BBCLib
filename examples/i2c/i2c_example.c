@@ -56,7 +56,6 @@ int i2c8x8LedMatrix() {
 	i2c->i2cnr = i2c1;
 	i2c->deviceAddress = 0x70;
 	i2c->openMode = O_RDWR;
-	init_bbc_lib();
 	if (open_i2c(i2c) == -1) {
 		debug("Could not open i2c bus.");
 		return 0;

@@ -57,7 +57,6 @@ int spiMCP23S08Example() {
  * This example will probe the axis 20 times every second.
  */
 int spiADXL345Example() {
-	setup();
 
 	printf("WORK IN PROGRESS\n");
 	unsigned char adxl345_setup[] = {};
@@ -113,7 +112,6 @@ void write8Bits(spi_properties *spi, unsigned char reg, unsigned char value) {
  * 255
  */
 int spiMCP4902Example() {
-	setup();
 
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
@@ -167,7 +165,6 @@ void write10Bits(spi_properties *spi, unsigned char reg, unsigned short value) {
  * 1024
  */
 int spiMCP4912Example() {
-	setup();
 
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
@@ -221,7 +218,6 @@ void write12Bits(spi_properties *spi, unsigned char reg, unsigned short value) {
  * 4096
  */
 int spiMCP4922Example() {
-	setup();
 
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
@@ -304,8 +300,6 @@ void setData(unsigned char *data, unsigned char reg, unsigned short value) {
 
 int spiMC23S08_MCP4902Example() {
 	unsigned char mcp23s08_setup[] = { 0x40, 0x00, 0x00, };
-
-	setup();
 
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;
