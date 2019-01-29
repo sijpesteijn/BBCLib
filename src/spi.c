@@ -7,8 +7,6 @@
 
 #include "spi.h"
 #include <sys/ioctl.h>
-#include <stdint.h>
-#include <linux/spi/spidev.h>
 
 uint8_t spi_open(spi_properties *spi) {
 //	syslog (LOG_INFO, "spi open - spi:%d bits_per_word:%d speed:%d mode:%f", spi, bits_per_word, speed, mode);
