@@ -8,18 +8,6 @@
 #include "spi_example.h"
 #include "../../src/log.h"
 
-int setup() {
-	init_bbc_lib();
-	overlay *ol = malloc(sizeof(overlay));
-	ol->file_name = "BBCLIB-SPI0";
-	ol->board_name = "BBCLib";
-	ol->manufacturer = "BBCLIB";
-	ol->part_number = "BBCLIB-SPI0";
-	ol->version = "00A0";
-	load_device_tree_overlay(ol);
-	return 1;
-}
-
 /*
  * MCP23S08 is a 8-Bit I/O Expander with Serial Interface.
  * This example lights the 8 leds in sequence for 10 times.
@@ -27,8 +15,6 @@ int setup() {
 int spiMCP23S08Example() {
 	unsigned char mcp23s08_setup[] = { 0x40, 0x00, 0x00, };
 	unsigned char mcp23s08_gpios[] = { 0x40, 0x09, 0x01, };
-
-	setup();
 
 	spi_properties *spi = malloc(sizeof(spi_properties));
 	spi->spi_id = spi0;

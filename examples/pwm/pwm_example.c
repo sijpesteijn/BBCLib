@@ -9,18 +9,6 @@
 #include "../../src/log.h"
 
 int pwmExample() {
-	init_bbc_lib();
-
-	overlay *ol = malloc(sizeof(overlay));
-	ol->file_name = "bone_pwm_P9_22";
-	ol->board_name = "Override Board Name";
-	ol->manufacturer = "Override Manuf";
-	ol->part_number = "bone_pwm_P9_22";
-	ol->version = "00A0";
-	load_device_tree_overlay(ol);
-	ol->file_name = "am33xx_pwm";
-	ol->part_number = "am33xx_pwm";
-	load_device_tree_overlay(ol);
 
 	pwm_properties *pwm = malloc(sizeof(pwm_properties));
 	pwm->name = "pwm_test_P9_22.12";

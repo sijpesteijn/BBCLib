@@ -87,7 +87,6 @@ short combineValues(unsigned char msb, unsigned char lsb) {
  * This example will probe the axis 20 times every second.
  */
 int i2cADXL345() {
-	init_bbc_lib();
 	i2c_properties *i2c = malloc(sizeof(i2c_properties));
 	i2c->i2cnr = i2c1;
 	i2c->deviceAddress = ADX_DEVID;

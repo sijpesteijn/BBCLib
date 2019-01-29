@@ -12,7 +12,6 @@
  * This example will open the gpio 60 port and flash the led 20 times.
  */
 int gpioLedExample() {
-	init_bbc_lib();
 	gpio_properties *gpio = malloc(sizeof(gpio_properties));
 	gpio->nr = LEDGPIO;
 	gpio->direction = OUTPUT_PIN;

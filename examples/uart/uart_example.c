@@ -16,7 +16,6 @@ int uartExample() {
 
 	printf("!!! Make sure you have enabled UART1 (/dev/ttyO1) see the README.md how to do this. !!!\n");
 
-	init_bbc_lib();
 	uart_properties *uart = malloc(sizeof(uart_properties));
 	uart->uart_id = uart1;
 	uart->baudrate = B4800;
