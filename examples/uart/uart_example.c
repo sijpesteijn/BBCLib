@@ -9,6 +9,8 @@
 #include "../../src/log.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
+#include <unistd.h>
 
 /*
  * UART.
