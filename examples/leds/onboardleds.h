@@ -9,7 +9,6 @@
 #define EXAMPLES_LEDS_ONBOARDLEDS_H_
 
 #include <fcntl.h>
-#include "../../src/core.h"
 #define BUF_SIZE 64
 #define leddir "/sys/class/leds/beaglebone:green:usr%d/"
 #define DELAY 300000

@@ -6,7 +6,6 @@
  */
 
 #include <stdio.h>
-#include "../../src/core.h"
 #include "../../src/i2c.h"
 
 #define ADX_DEVID   0x53

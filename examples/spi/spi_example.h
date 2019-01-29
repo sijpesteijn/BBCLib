@@ -6,7 +6,6 @@
  */
 
 #include <stdio.h>
-#include "../../src/core.h"
 #include "../../src/spi.h"
 #include "../../src/gpio.h"
 #include "../gpio/gpio_example.h"
