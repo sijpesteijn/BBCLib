@@ -25,8 +25,8 @@ void getLedTrigger(led_info *led) {
 	}
 
 	printf("%s\n", buf);
-	char str[92];
-	fgets(str, 92, fd);
+	char str[1024];
+	fgets(str, 1024, fd);
 	printf("%s\n", str);
 //	for(i = 0; i < 92; i++) {
 //		if (str[i] == '[')
