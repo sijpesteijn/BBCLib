@@ -5,7 +5,6 @@
  *      Author: gijs
  */
 
-#include <stdio.h>
 #include "../../src/gpio.h"
 
 #define LEDGPIO 60;
