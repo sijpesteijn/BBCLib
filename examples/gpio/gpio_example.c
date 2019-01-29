@@ -21,7 +21,7 @@ int gpioLedExample() {
 
 	if (isOpen == 0) {
 		int i=0;
-		for(i=0;i<20;i++) {
+		for(i=0;i<10;i++) {
 			gpio_set_value(gpio, 1);
 			sleep(1);
 			gpio_set_value(gpio, 0);
