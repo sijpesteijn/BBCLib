@@ -6,6 +6,8 @@
  */
 
 #include "uart_example.h"
+#include <string.h>
+#include <stdlib.h>
 
 /*
  * UART.
