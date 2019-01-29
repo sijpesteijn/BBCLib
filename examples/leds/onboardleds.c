@@ -13,7 +13,6 @@
 #include "../../src/log.h"
 
 void getLedTrigger(led_info *led) {
-	printf(leddir);
 //	printf("Get Led trigger %d", led->lednr);
 	FILE *fd;
 	int i, j = 0, start, end;
@@ -21,26 +20,26 @@ void getLedTrigger(led_info *led) {
 	snprintf(buf, sizeof(buf), leddir "trigger", led->lednr);
 
 	printf(buf);
-	fd = fopen(buf, "r");
-	if (fd < 0) {
-		perror("led/trigger");
-	}
-
-	char str[92];
-	fgets(str, 92, fd);
-	for(i = 0; i < 92; i++) {
-		if (str[i] == '[')
-			start = i + 1;
-		if (str[i] == ']')
-			end = i;
-	}
-	led->org_trigger = malloc(sizeof(char)*((end - start) + 1));
-
-	for( i = start; i < end; i++) {
-		led->org_trigger[j++] = str[i];
-	}
-	led->org_trigger[end] = '\0';
-	fclose(fd);
+//	fd = fopen(buf, "r");
+//	if (fd < 0) {
+//		perror("led/trigger");
+//	}
+//
+//	char str[92];
+//	fgets(str, 92, fd);
+//	for(i = 0; i < 92; i++) {
+//		if (str[i] == '[')
+//			start = i + 1;
+//		if (str[i] == ']')
+//			end = i;
+//	}
+//	led->org_trigger = malloc(sizeof(char)*((end - start) + 1));
+//
+//	for( i = start; i < end; i++) {
+//		led->org_trigger[j++] = str[i];
+//	}
+//	led->org_trigger[end] = '\0';
+//	fclose(fd);
 }
 
 void setLedTrigger(led_info *led, char *value) {
