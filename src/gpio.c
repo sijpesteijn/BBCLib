@@ -11,7 +11,7 @@
 #include "log.h"
 
 int gpio_open(gpio_properties *gpio) {
-	info(strcat("gpio_open: export gpio: ", gpio->nr));
+	info("gpio_open: export gpio: ", gpio->nr);
 	FILE *export;
 	export = fopen(SYSFS_GPIO_DIR "/export", "w");
 	if (export < 0) {
@@ -57,7 +57,7 @@ int gpio_close(gpio_properties *gpio) {
 }
 
 int gpio_set_value(gpio_properties *gpio, int value) {
-    debug(string("gpio set value: %d, %d", gpio->nr, value));
+    debug("gpio set value: %d, %d", gpio->nr, value);
 	FILE *fd;
 	char buf[MAX_BUF];
 
@@ -78,7 +78,7 @@ int gpio_set_value(gpio_properties *gpio, int value) {
 }
 
 int gpio_get_value(gpio_properties *gpio) {
-    debug(string("gpio get value: %d", gpio->nr));
+    debug("gpio get value: %d", gpio->nr);
 	int value;
 	FILE *fd;
 	char buf[MAX_BUF];
@@ -104,7 +104,7 @@ int gpio_get_value(gpio_properties *gpio) {
 }
 
 int gpio_set_edge(gpio_properties *gpio, char *edge) {
-    debug(string("gpio set edge: %d, %s", gpio->nr, edge));
+    debug("gpio set edge: %d, %s", gpio->nr, edge);
 	FILE *fd;
 	char buf[MAX_BUF];
 
