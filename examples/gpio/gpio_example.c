@@ -7,7 +7,6 @@
 
 #include "gpio_example.h"
 #include "../../src/log.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 /*
