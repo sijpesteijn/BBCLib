@@ -199,13 +199,14 @@ int onBoardLedsExample() {
 	led2->lednr = 2;
 	led3->lednr = 3;
 
-	saveState();
-	clearLeds();
-	walker();
-	filler();
-	shader();
-	flipflop();
-	resetState();
+	printf(leddir);
+//	saveState();
+//	clearLeds();
+//	walker();
+//	filler();
+//	shader();
+//	flipflop();
+//	resetState();
 
 	free(led0);
 	free(led1);
