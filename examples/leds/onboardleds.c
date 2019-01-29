@@ -15,7 +15,7 @@
 void getLedTrigger(led_info *led) {
 //	printf("Get Led trigger %d", led->lednr);
 	FILE *fd;
-	int i, j = 0, start, end;
+	int i, j = 0, start = -1, end = -1;
 	char buf[BUF_SIZE];
 	snprintf(buf, sizeof(buf), leddir "trigger", led->lednr);
 
@@ -28,11 +28,14 @@ void getLedTrigger(led_info *led) {
 	char str[1024];
 	fgets(str, 1024, fd);
 	printf("%s\n", str);
-	for(i = 0; i < 92; i++) {
+	for(i = 0; i < 1024; i++) {
 		if (str[i] == '[')
 			start = i + 1;
 		if (str[i] == ']')
 			end = i;
+	}
+	if (start == -1 || end == -1) {
+		error("Could not find trigger in values: %s\n", str)
 	}
 	led->org_trigger = malloc(sizeof(char)*((end - start) + 1));
 
