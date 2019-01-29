@@ -28,19 +28,20 @@ void getLedTrigger(led_info *led) {
 	char str[1024];
 	fgets(str, 1024, fd);
 	printf("%s\n", str);
-//	for(i = 0; i < 92; i++) {
-//		if (str[i] == '[')
-//			start = i + 1;
-//		if (str[i] == ']')
-//			end = i;
-//	}
-//	led->org_trigger = malloc(sizeof(char)*((end - start) + 1));
-//
-//	for( i = start; i < end; i++) {
-//		led->org_trigger[j++] = str[i];
-//	}
-//	led->org_trigger[end] = '\0';
-//	fclose(fd);
+	for(i = 0; i < 92; i++) {
+		if (str[i] == '[')
+			start = i + 1;
+		if (str[i] == ']')
+			end = i;
+	}
+	led->org_trigger = malloc(sizeof(char)*((end - start) + 1));
+
+	for( i = start; i < end; i++) {
+		led->org_trigger[j++] = str[i];
+	}
+	led->org_trigger[end] = '\0';
+	printf("%s\n", led->org_trigger);
+	fclose(fd);
 }
 
 void setLedTrigger(led_info *led, char *value) {
