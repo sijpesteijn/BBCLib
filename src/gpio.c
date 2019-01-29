@@ -11,7 +11,7 @@
 #include "log.h"
 
 int gpio_open(gpio_properties *gpio) {
-	info("gpio_open: export gpio: ", gpio->nr);
+	info("gpio_open: export gpio: %d", gpio->nr);
 	FILE *export;
 	export = fopen(SYSFS_GPIO_DIR "/export", "w");
 	if (export < 0) {
@@ -22,7 +22,7 @@ int gpio_open(gpio_properties *gpio) {
 	sprintf(str, "%d", gpio->nr);
 	fputs(str, export);
 	fclose(export);
-	info("gpio_open: set direction: %d, %s", gpio->nr, gpio->direction);
+	info("gpio_open: set direction: %d, %d", gpio->nr, (int)gpio->direction);
 	FILE *fd;
 	char buf[MAX_BUF];
 
