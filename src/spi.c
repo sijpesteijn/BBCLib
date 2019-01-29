@@ -7,6 +7,7 @@
 
 #include "spi.h"
 #include <sys/ioctl.h>
+#include <stdint.h>
 #include <linux/spi/spidev.h>
 
 uint8_t spi_open(spi_properties *spi) {
