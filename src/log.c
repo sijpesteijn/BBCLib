@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "log.h"
 #include <syslog.h>
-#include <stdarg.h>.
+#include <stdarg.h>
 
 
 void info(const char *message, ...) {
