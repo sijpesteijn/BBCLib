@@ -22,14 +22,14 @@ int gpio_open(gpio_properties *gpio) {
 	sprintf(str, "%d", gpio->nr);
 	fputs(str, export);
 	fclose(export);
-	info("gpio_open: set direction: %d, %d", gpio->nr, gpio->direction);
+	info("gpio_open: set direction: %d, %s", gpio->nr, gpio->direction);
 	FILE *fd;
 	char buf[MAX_BUF];
 
 	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/direction", gpio->nr);
 	fd = fopen(buf, "w");
 	if (fd < 0) {
-		perror("gpio/direction");
+		error("Could not set gpio direction: %s", gpio->direction);
 		return 1;
 	}
 	if (gpio->direction == OUTPUT_PIN)

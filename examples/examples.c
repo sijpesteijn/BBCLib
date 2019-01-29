@@ -17,7 +17,7 @@
 
 int main(int argc, char **argv) {
 	printf("Choose the example to run:\n");
-	printf("1 - user leds\n");
+	printf("1 - onboard leds\n");
 	printf("2 - gpio led\n");
 	printf("3 - gpio input\n");
 	printf("4 - gpio input led\n");
