@@ -19,14 +19,15 @@ void getLedTrigger(led_info *led) {
 	char buf[BUF_SIZE];
 	snprintf(buf, sizeof(buf), leddir "trigger", led->lednr);
 
-	printf(buf);
 	fd = fopen(buf, "r");
 	if (fd < 0) {
 		error("On board leds: could not get led trigger");
 	}
 
-//	char str[92];
-//	fgets(str, 92, fd);
+	printf("%s\n", buf);
+	char str[92];
+	fgets(str, 92, fd);
+	printf("%s\n", str);
 //	for(i = 0; i < 92; i++) {
 //		if (str[i] == '[')
 //			start = i + 1;
