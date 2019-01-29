@@ -6,6 +6,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "./gpio/gpio_example.h"
 #include "./i2c/i2c_example.h"
 #include "./pwm/pwm_example.h"

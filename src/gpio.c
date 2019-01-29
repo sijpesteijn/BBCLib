@@ -5,6 +5,7 @@
  *      Author: gijs
  */
 
+#include <string.h>
 #include <stdio.h>
 #include "gpio.h"
 #include "log.h"

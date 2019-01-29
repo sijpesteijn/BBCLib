@@ -38,7 +38,6 @@ int gpioLedExample() {
  */
 int gpioInputExample() {
 	int value, i;
-	init_bbc_lib();
 
 	gpio_properties *gpio = malloc(sizeof(gpio_properties));
 	gpio->nr = BUTTONGPIO;
@@ -65,7 +64,6 @@ int gpioInputExample() {
  */
 int gpioInputLedExample() {
 	int value, i;
-	init_bbc_lib();
 
 	gpio_properties *led = malloc(sizeof(gpio_properties));
 	led->nr = LEDGPIO;
