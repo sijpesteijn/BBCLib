@@ -6,6 +6,7 @@
  */
 
 #include "gpio_example.h"
+#include "../../src/log.h"
 
 /*
  * This example will open the gpio 60 port and flash the led 20 times.
@@ -29,7 +30,7 @@ int gpioLedExample() {
 		gpio_close(gpio);
 	}
 	free(gpio);
-    log::debug("Finished gpio led example.");
+    debug("Finished gpio led example.");
 	return 0;
 }
 
@@ -54,7 +55,7 @@ int gpioInputExample() {
 		}
 		gpio_close(gpio);
 	}
-    log::debug("Finished gpio input example.");
+    debug("Finished gpio input example.");
 	return 0;
 }
 
@@ -87,6 +88,6 @@ int gpioInputLedExample() {
 	}
 	free(led);
 	free(button);
-    log::debug("Finished gpio input led example.");
+    debug("Finished gpio input led example.");
 	return 0;
 }

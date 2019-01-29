@@ -7,6 +7,7 @@
 
 #include <syslog.h>
 #include "onboardleds.h"
+#include "../../src/log.h"
 
 void getLedTrigger(led_info *led) {
 //	printf("Get Led trigger %d", led->lednr);
@@ -15,6 +16,7 @@ void getLedTrigger(led_info *led) {
 	char buf[BUF_SIZE];
 	snprintf(buf, sizeof(buf), leddir "trigger", led->lednr);
 
+	printf(buf);
 	fd = fopen(buf, "r");
 	if (fd < 0) {
 		perror("led/trigger");
@@ -205,6 +207,6 @@ int onBoardLedsExample() {
 	free(led1);
 	free(led2);
 	free(led3);
-	syslog(LOG_INFO,"%s", "Finished on board leds example");
+	debug("Finished on board leds example");
 	return 0;
 }

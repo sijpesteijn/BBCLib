@@ -5,13 +5,12 @@
  *      Author: gijs
  */
 
-#include "core.h"
 #include "i2c.h"
 
 int res, daddress;
 
 int open_i2c(i2c_properties *i2c) {
-	syslog(LOG_INFO, "i2c open - i2c:%d device address: 0x%x mode:%i", i2c->i2cnr,
+	info("i2c open - i2c:%d device address: 0x%x mode:%i", i2c->i2cnr,
 			i2c->deviceAddress, i2c->openMode);
 	char filename[20];
 
@@ -19,10 +18,10 @@ int open_i2c(i2c_properties *i2c) {
 	i2c->fd = open(filename, i2c->openMode);
 	if (i2c->fd < 0) {
 		if (errno == ENOENT) {
-			syslog(LOG_ERR, "Error: Could not open file "
+			error("Error: Could not open file "
 					"/dev/i2c-%d: %s\n", i2c->i2cnr, strerror(ENOENT));
 		} else {
-			syslog(LOG_ERR, "Error: Could not open file "
+			error("Error: Could not open file "
 
 					"`%s': %s\n", filename, strerror(errno));
 			if (errno == EACCES)
@@ -32,7 +31,7 @@ int open_i2c(i2c_properties *i2c) {
 	}
 
 	if (ioctl(i2c->fd, I2C_SLAVE, i2c->deviceAddress) < 0) {
-		syslog(LOG_ERR, "Error: Could not set address to 0x%02x: %s\n",
+		error("Error: Could not set address to 0x%02x: %s\n",
 				i2c->deviceAddress, strerror(errno));
 		return -errno;
 	}
@@ -42,7 +41,7 @@ int open_i2c(i2c_properties *i2c) {
 int write_byte_i2c(i2c_properties *i2c, unsigned char reg) {
 	res = i2c_smbus_write_byte(i2c->fd, reg);
 	if (res < 0) {
-		syslog(LOG_ERR, "Warning - write failed, filename=%i, register=%i\n",
+		error("Warning - write failed, filename=%i, register=%i\n",
 				i2c->fd, reg);
 		return 1;
 	}
@@ -54,8 +53,7 @@ int write_data_i2c(i2c_properties *i2c, unsigned char reg, char value) {
 	buf[0] = reg;
 	buf[1] = value;
 	if (write(i2c->fd, buf, 2) != 2) {
-		syslog(LOG_ERR,
-				"Warning - write data failed, filename=%i, register=%i\n", i2c->fd,
+		error("Warning - write data failed, filename=%i, register=%i\n", i2c->fd,
 				reg);
 		return 1;
 	}
@@ -68,7 +66,7 @@ int read_i2c(i2c_properties *i2c, unsigned char *readBuffer, int bufferSize) {
 		return 1;
 	}
 	if(readBuffer[0x00]!=0xE5){
-		syslog(LOG_INFO, "%s", "Problem detected! Device ID is wrong");
+		info("Problem detected! Device ID is wrong");
 	}
 	return 0;
 }

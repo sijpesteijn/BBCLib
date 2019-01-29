@@ -51,6 +51,6 @@ int uartExample() {
 		uart_close(uart);
 	}
 
-	syslog(LOG_INFO, "%s", "Finished pwm example.");
+	debug("Finished pwm example.");
 	return 0;
 }

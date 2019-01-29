@@ -6,6 +6,7 @@
  */
 
 #include "spi_example.h"
+#include "../../src/log.h"
 
 int setup() {
 	init_bbc_lib();
@@ -61,7 +62,7 @@ int spiMCP23S08Example() {
 		}
 		spi_close(spi);
 	}
-	syslog(LOG_INFO, "%s", "Finished spi example.");
+	debug("Finished spi example.");
 	return 0;
 }
 
@@ -160,7 +161,7 @@ int spiMCP4902Example() {
 		write8Bits(spi, 0xf0, 0);
 	}
 	free(spi);
-	syslog(LOG_INFO, "%s", "Finished spi example.");
+	debug("Finished spi example.");
 	return 0;
 }
 
@@ -214,7 +215,7 @@ int spiMCP4912Example() {
 		write10Bits(spi, 0xf0, 0);
 	}
 	free(spi);
-	syslog(LOG_INFO, "%s", "Finished spi example.");
+	debug("Finished spi example.");
 	return 0;
 }
 
@@ -268,12 +269,12 @@ int spiMCP4922Example() {
 		write12Bits(spi, 0xf0, 0);
 	}
 	free(spi);
-	syslog(LOG_INFO, "%s", "Finished spi example.");
+	debug("Finished spi example.");
 	return 0;
 }
 
 void dprint(unsigned char value) {
-	syslog(LOG_INFO, "0x%02x", value);
+	debug("0x%02x", value);
 }
 
 int set_MCP23S08_GPIO_values(spi_properties *spi, unsigned char value) {
@@ -363,6 +364,6 @@ int spiMC23S08_MCP4902Example() {
 	}
 
 	free(spi);
-	syslog(LOG_INFO, "%s", "Finished spi example.");
+	debug("Finished spi example.");
 	return 0;
 }

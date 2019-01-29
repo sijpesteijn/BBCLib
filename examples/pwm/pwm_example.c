@@ -6,6 +6,7 @@
  */
 
 #include "pwm_example.h"
+#include "../../src/log.h"
 
 int pwmExample() {
 	init_bbc_lib();
@@ -51,7 +52,7 @@ int pwmExample() {
 					printf("Could not set duty.\n");
 					return -1;
 				}
-				syslog(LOG_INFO,"Wrote %d to pwm (%s)", i, pwm->name);
+				debug("Wrote %d to pwm (%s)", i, pwm->name);
 				usleep(100000);
 			}
 			i = 10;
@@ -59,6 +60,6 @@ int pwmExample() {
 
 		pwm_set_run(pwm, 0);
 	}
-	syslog(LOG_INFO, "%s", "Finished pwm example.");
+	debug("Finished pwm example.");
 	return 0;
 }

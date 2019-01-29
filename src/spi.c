@@ -18,7 +18,7 @@ uint8_t spi_open(spi_properties *spi) {
 		perror("could not open spi.");
 		return -1;
     }
-    syslog(LOG_INFO,"FD: %i", spi->fd);
+    info("FD: %i", spi->fd);
     if (ioctl(spi->fd, SPI_IOC_WR_MODE, &spi->mode)==-1){
        perror("SPI: Can't set SPI mode.");
        return -1;
@@ -33,15 +33,15 @@ uint8_t spi_open(spi_properties *spi) {
     }
 
     // Check that the properties have been set
-    syslog (LOG_INFO,"SPI fd is: %d\n", spi->fd);
-    syslog (LOG_INFO,"SPI Mode is: %d\n", spi->mode);
-    syslog (LOG_INFO,"SPI Bits is: %d\n", spi->bits_per_word);
-    syslog (LOG_INFO,"SPI Speed is: %d\n", spi->speed);
+    info("SPI fd is: %d\n", spi->fd);
+    info("SPI Mode is: %d\n", spi->mode);
+    info("SPI Bits is: %d\n", spi->bits_per_word);
+    info("SPI Speed is: %d\n", spi->speed);
     return 0;
 }
 
 uint8_t spi_close(spi_properties *spi) {
-	syslog (LOG_INFO, "spi close - spi:%d", spi->fd);
+    info("spi close - spi:%d", spi->fd);
     close(spi->fd);
     return 0;
 }

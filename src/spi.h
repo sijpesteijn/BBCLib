@@ -8,7 +8,6 @@
 #ifndef SPI_H_
 #define SPI_H_
 
-#include "core.h"
 #include <linux/spi/spidev.h>
 
 typedef enum {

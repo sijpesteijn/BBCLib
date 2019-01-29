@@ -3,13 +3,12 @@
 // Until I figure out how to use syslog on apple, I use this.
 //
 
+#include <stdlib.h>
 #include "log.h"
-#include <iostream>
 #include <syslog.h>
 
-using namespace std;
 
-void log::info(string message) {
+void info(char *message) {
 #ifdef __APPLE__
     cout << message << endl;
 #else
@@ -17,7 +16,7 @@ void log::info(string message) {
 #endif
 }
 
-void log::debug(string message) {
+void debug(char *message) {
 #ifdef __APPLE__
     cout << message << endl;
 #else
@@ -25,7 +24,7 @@ void log::debug(string message) {
 #endif
 }
 
-void log::error(string message) {
+void error(char *message) {
 #ifdef __APPLE__
     cout << message << endl;
 #else

@@ -5,14 +5,9 @@
 #ifndef BBLASER_LOG_H
 #define BBLASER_LOG_H
 
-#include <string>
-
-class log {
-public:
-    static void info(std::string message);
-    static void debug(std::string message);
-    static void error(std::string message);
-};
+extern void info(char *message);
+extern void debug(char *message);
+extern void error(char *message);
 
 
 #endif //BBLASER_LOG_H
