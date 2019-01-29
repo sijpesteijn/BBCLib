@@ -6,6 +6,7 @@
  */
 
 #include "uart_example.h"
+#include "../../src/log.h"
 #include <string.h>
 #include <stdlib.h>
 
