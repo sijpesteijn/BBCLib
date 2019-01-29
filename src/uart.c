@@ -6,7 +6,8 @@
  */
 
 #include "uart.h"
-
+#include <string.h>
+#include <fcntl.h>
 
 int uart_open(uart_properties *uart) {
 	FILE *slots;
@@ -16,13 +17,13 @@ int uart_open(uart_properties *uart) {
 	strcat(buf,port_nr);
 	struct termios uart_port;
 
-	slots = fopen(SLOTS, "w");
-	if(slots == NULL) printf("slots didn't open\n");
-	fseek(slots,0,SEEK_SET);
-
-	fprintf(slots, "BB-UART%i", uart->uart_id+1);
-	fflush(slots);
-	fclose(slots);
+//	slots = fopen(SLOTS, "w");
+//	if(slots == NULL) printf("slots didn't open\n");
+//	fseek(slots,0,SEEK_SET);
+//
+//	fprintf(slots, "BB-UART%i", uart->uart_id+1);
+//	fflush(slots);
+//	fclose(slots);
 
 	uart->fd = open(buf, O_RDWR | O_NOCTTY);
 	if(uart->fd < 0) printf("port failed to open\n");

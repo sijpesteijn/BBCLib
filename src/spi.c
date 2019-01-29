@@ -6,6 +6,7 @@
  */
 
 #include "spi.h"
+#include "log.h"
 #include <sys/ioctl.h>
 
 uint8_t spi_open(spi_properties *spi) {
