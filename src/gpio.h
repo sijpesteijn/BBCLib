@@ -13,7 +13,7 @@
 
 typedef enum {
 	INPUT_PIN=0,
-	OUTPUT_PIN=1
+	OUTPUT_PIN
 } PIN_DIRECTION;
 
 typedef struct {

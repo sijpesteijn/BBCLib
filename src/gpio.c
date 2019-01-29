@@ -22,7 +22,7 @@ int gpio_open(gpio_properties *gpio) {
 	sprintf(str, "%d", gpio->nr);
 	fputs(str, export);
 	fclose(export);
-	info("gpio_open: set direction: %d, %d", gpio->nr, (int)gpio->direction);
+	info("gpio_open: set direction: %d, %d", gpio->nr, (int)OUTPUT_PIN);
 	FILE *fd;
 	char buf[MAX_BUF];
 
