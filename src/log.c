@@ -20,7 +20,7 @@ void debug(const char *message, ...) {
 #ifdef __APPLE__
     printf(*message, ...);
 #else
-    syslog (LOG_DEBUG, "%s", message);
+    syslog (LOG_DEBUG, message);
 #endif
 }
 
@@ -28,6 +28,6 @@ void error(const char *message, ...) {
 #ifdef __APPLE__
     printf(*message, ...);
 #else
-    syslog (LOG_ERR, "%s", message);
+    syslog (LOG_ERR, message);
 #endif
 }
