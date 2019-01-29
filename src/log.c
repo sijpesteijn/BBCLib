@@ -13,7 +13,8 @@ void info(const char *message, ...) {
 #ifdef __APPLE__
     printf(*message, ...);
 #else
-    syslog (LOG_INFO, message, __va_list__);
+    printf(*message, ...);
+    syslog (LOG_INFO, message);
 #endif
 }
 
@@ -21,6 +22,7 @@ void debug(const char *message, ...) {
 #ifdef __APPLE__
     printf(*message, ...);
 #else
+    printf(*message, ...);
     syslog (LOG_DEBUG, message);
 #endif
 }
@@ -29,6 +31,7 @@ void error(const char *message, ...) {
 #ifdef __APPLE__
     printf(*message, ...);
 #else
+    printf(*message, ...);
     syslog (LOG_ERR, message);
 #endif
 }
