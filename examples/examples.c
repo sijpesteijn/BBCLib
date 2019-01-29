@@ -26,6 +26,11 @@ int main(int argc, char **argv) {
 	printf("7 - spi MCP4902\n");
 	printf("8 - i2c 8x8 Led Matrix\n");
 	printf("9 - i2c ADXL345\n");
+	printf("10 - i2c ADXL345\n");
+	printf("11 - i2c ADXL345\n");
+	printf("12 - i2c ADXL345\n");
+	printf("13 - i2c ADXL345\n");
+	printf("14 - i2c ADXL345\n");
 
 	char c[100];
 	scanf("%s" , c) ;
@@ -35,30 +40,29 @@ int main(int argc, char **argv) {
 		gpioLedExample();
 	} else if (strcmp(c, "3") == 0) {
 		gpioInputExample();
+	} else if (strcmp(c, "4") == 0) {
+		gpioInputLedExample();
+	} else if (strcmp(c, "5") == 0) {
+		spiMCP23S08Example();
+	} else if (strcmp(c, "6") == 0) {
+		spiADXL345Example();
+	} else if (strcmp(c, "7") == 0) {
+		spiMCP4902Example();
+	} else if (strcmp(c, "8") == 0) {
+		spiMCP4912Example();
+	} else if (strcmp(c, "9") == 0) {
+		spiMCP4922Example();
+	} else if (strcmp(c, "10") == 0) {
+		i2c8x8LedMatrix();
+	} else if (strcmp(c, "11") == 0) {
+		i2cADXL345();
+	} else if (strcmp(c, "12") == 0) {
+		uartExample();
+	} else if (strcmp(c, "13") == 0) {
+		pwmExample();
+	} else if (strcmp(c, "14") == 0) {
+		spiMC23S08_MCP4902Example();
 	}
-//	if (c == 51 || c == 48)
-//	if (c == 52 || c == 48)
-//		gpioInputLedExample();
-//	if (c == 53 || c == 48)
-//		spiMCP23S08Example();
-//	if (c == 54 || c == 48)
-//		spiADXL345Example();
-//	if (c == 55 || c == 48)
-//		spiMCP4902Example();
-//	if (c == 56 || c == 48)
-//		spiMCP4912Example();
-//	if (c == 57 || c == 48)
-//		spiMCP4922Example();
-//	if (c == 58 || c == 48)
-//		i2c8x8LedMatrix();
-//	if (c == 59 || c == 48)
-//		i2cADXL345();
-//	if (c == 60 || c == 48)
-//		uartExample();
-//	if (c == 61 || c == 48)
-//		pwmExample();
-//	if (c == 62 || c == 48)
-//		spiMC23S08_MCP4902Example();
 
 	return 0;
 }
