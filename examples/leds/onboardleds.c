@@ -12,7 +12,7 @@
 #include "onboardleds.h"
 #include "../../src/log.h"
 
-void getLedTrigger(led_info *led) {
+void saveOriginalLedTrigger(led_info *led) {
 //	printf("Get Led trigger %d", led->lednr);
 	FILE *fd;
 	int i, j = 0, start = -1, end = -1;
@@ -24,10 +24,8 @@ void getLedTrigger(led_info *led) {
 		error("On board leds: could not get led trigger");
 	}
 
-	printf("%s\n", buf);
 	char str[1024];
 	fgets(str, 1024, fd);
-	printf("%s\n", str);
 	for(i = 0; i < 1024; i++) {
 		if (str[i] == '[')
 			start = i + 1;
@@ -43,7 +41,6 @@ void getLedTrigger(led_info *led) {
 		led->org_trigger[j++] = str[i];
 	}
 	led->org_trigger[end] = '\0';
-	printf("%s\n", led->org_trigger);
 	fclose(fd);
 }
 
@@ -58,7 +55,7 @@ void setLedTrigger(led_info *led, char *value) {
 	fclose(fd);
 }
 
-void getLedBrightness(led_info *led) {
+void saveOriginalLedBrightness(led_info *led) {
 	FILE *fd;
 	char buf[BUF_SIZE];
 	snprintf(buf, sizeof(buf), leddir "brightness", led->lednr);
@@ -83,14 +80,14 @@ void setLedBrightness(led_info *led, int value) {
 }
 
 void saveState() {
-	getLedTrigger(led0);
-//	getLedBrightness(led0);
-//	getLedTrigger(led1);
-//	getLedBrightness(led1);
-//	getLedTrigger(led2);
-//	getLedBrightness(led2);
-//	getLedTrigger(led3);
-//	getLedBrightness(led3);
+	saveOriginalLedTrigger(led0);
+	saveOriginalLedBrightness(led0);
+	saveOriginalLedTrigger(led1);
+	saveOriginalLedBrightness(led1);
+	saveOriginalLedTrigger(led2);
+	saveOriginalLedBrightness(led2);
+	saveOriginalLedTrigger(led3);
+	saveOriginalLedBrightness(led3);
 }
 
 void resetState() {
