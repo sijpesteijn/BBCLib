@@ -35,7 +35,7 @@ void getLedTrigger(led_info *led) {
 			end = i;
 	}
 	if (start == -1 || end == -1) {
-		error("Could not find trigger in values: %s\n", str)
+		error("Could not find trigger in values: %s\n", str);
 	}
 	led->org_trigger = malloc(sizeof(char)*((end - start) + 1));
 
