@@ -6,6 +6,8 @@
  */
 
 #include <unistd.h>
+#include <stdio.h>
+#include <fcntl.h>
 #include "pwm.h"
 #include "log.h"
 
@@ -14,7 +16,7 @@ int pwm_open(pwm_properties *pwm) {
 	strcat(filename, pwm->name);
 
 	if (access(filename, F_OK) == -1) {
-		error(strcat("Could not open file: ", filename));
+		error("Could not open file: ", filename);
 		return 0;
 	}
 	return 1;
