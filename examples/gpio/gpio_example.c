@@ -7,6 +7,7 @@
 
 #include "gpio_example.h"
 #include "../../src/log.h"
+#include <stdio.h>
 
 /*
  * This example will open the gpio 60 port and flash the led 20 times.
@@ -22,9 +23,9 @@ int gpioLedExample() {
 		int i=0;
 		for(i=0;i<20;i++) {
 			gpio_set_value(gpio, 1);
-			usleep(100000);
+			sleep(1);
 			gpio_set_value(gpio, 0);
-			usleep(100000);
+			sleep(1);
 		}
 		gpio_close(gpio);
 	}
@@ -49,7 +50,7 @@ int gpioInputExample() {
 		for(i=0;i<600;i++) {
 			value = gpio_get_value(gpio);
 			printf("Value: %d\n", value);
-			usleep(100000);
+			sleep(1);
 		}
 		gpio_close(gpio);
 	}
@@ -78,7 +79,7 @@ int gpioInputLedExample() {
 		for(i=0;i<600;i++) {
 			value = gpio_get_value(button);
 			gpio_set_value(led, value);
-			usleep(100000);
+			sleep(1);
 		}
 		gpio_close(led);
 		gpio_close(button);
