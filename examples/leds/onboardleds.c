@@ -200,12 +200,12 @@ int onBoardLedsExample() {
 	led3->lednr = 3;
 
 	saveState();
-//	clearLeds();
-//	walker();
-//	filler();
-//	shader();
-//	flipflop();
-//	resetState();
+	clearLeds();
+	walker();
+	filler();
+	shader();
+	flipflop();
+	resetState();
 
 	free(led0);
 	free(led1);

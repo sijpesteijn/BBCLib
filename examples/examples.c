@@ -27,14 +27,9 @@ int main(int argc, char **argv) {
 	printf("8 - i2c 8x8 Led Matrix\n");
 	printf("9 - i2c ADXL345\n");
 
-//	 int c = getchar();
-
 	char c[100];
 	scanf("%s" , c) ;
-//	gets( str );
-	 printf("Nr %s\n", c);
 	if (strcmp(c,"1") == 0) {
-		printf("On board leds.\n");
 		onBoardLedsExample();
 	} else if (strcmp(c,"2") == 0) {
 		gpioLedExample();
