@@ -10,7 +10,6 @@
 
 #include <stdio.h>
 #include <termios.h>
-#include "core.h"
 
 typedef enum {
 	uart0 = 0, uart1 = 1, uart2 = 2, uart3 = 3, uart4 = 4, uart5 = 5
