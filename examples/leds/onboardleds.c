@@ -199,7 +199,11 @@ int onBoardLedsExample() {
 	led2->lednr = 2;
 	led3->lednr = 3;
 
-	printf(leddir);
+	char buf[BUF_SIZE];
+	snprintf(buf, sizeof(buf), leddir "trigger", led0->lednr);
+
+
+	printf(buf);
 //	saveState();
 //	clearLeds();
 //	walker();
