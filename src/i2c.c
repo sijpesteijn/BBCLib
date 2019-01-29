@@ -18,14 +18,11 @@ int open_i2c(i2c_properties *i2c) {
 	i2c->fd = open(filename, i2c->openMode);
 	if (i2c->fd < 0) {
 		if (errno == ENOENT) {
-			error("Error: Could not open file "
-					"/dev/i2c-%d: %s\n", i2c->i2cnr, strerror(ENOENT));
+			error("Error: Could not open file /dev/i2c-%d: %s\n", i2c->i2cnr, strerror(ENOENT));
 		} else {
-			error("Error: Could not open file "
-
-					"`%s': %s\n", filename, strerror(errno));
+			error("Error: Could not open file `%s': %s\n", filename, strerror(errno));
 			if (errno == EACCES)
-				fprintf(stderr, "Run as root?\n");
+				error("Run as root?\n");
 		}
 		return -1;
 	}
@@ -62,7 +59,7 @@ int write_data_i2c(i2c_properties *i2c, unsigned char reg, char value) {
 
 int read_i2c(i2c_properties *i2c, unsigned char *readBuffer, int bufferSize) {
 	if (read(i2c->fd, readBuffer, bufferSize) != bufferSize) {
-		perror("Failed to read in the buffer\n");
+		error("Failed to read in the buffer\n");
 		return 1;
 	}
 	if(readBuffer[0x00]!=0xE5){
