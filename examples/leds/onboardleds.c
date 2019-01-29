@@ -20,6 +20,7 @@ void getLedTrigger(led_info *led) {
 	char buf[BUF_SIZE];
 	snprintf(buf, sizeof(buf), leddir "trigger", led->lednr);
 
+	printf(buf);
 	fd = fopen(buf, "r");
 	if (fd < 0) {
 		perror("led/trigger");
@@ -78,16 +79,14 @@ void setLedBrightness(led_info *led, int value) {
 }
 
 void saveState() {
-	printf(leddir);
-//	printf("Save state");
 	getLedTrigger(led0);
-	getLedBrightness(led0);
-	getLedTrigger(led1);
-	getLedBrightness(led1);
-	getLedTrigger(led2);
-	getLedBrightness(led2);
-	getLedTrigger(led3);
-	getLedBrightness(led3);
+//	getLedBrightness(led0);
+//	getLedTrigger(led1);
+//	getLedBrightness(led1);
+//	getLedTrigger(led2);
+//	getLedBrightness(led2);
+//	getLedTrigger(led3);
+//	getLedBrightness(led3);
 }
 
 void resetState() {
@@ -199,12 +198,7 @@ int onBoardLedsExample() {
 	led2->lednr = 2;
 	led3->lednr = 3;
 
-	char buf[BUF_SIZE];
-	snprintf(buf, sizeof(buf), leddir "trigger", led0->lednr);
-
-
-	printf(buf);
-//	saveState();
+	saveState();
 //	clearLeds();
 //	walker();
 //	filler();
