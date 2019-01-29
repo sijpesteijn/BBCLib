@@ -8,26 +8,26 @@
 #include <syslog.h>
 
 
-void info(char *message) {
+void info(const char *message, ...) {
 #ifdef __APPLE__
-    cout << message << endl;
+    printf(*message, ...);
 #else
-    syslog (LOG_INFO, "%s", message.c_str());
+    syslog (LOG_INFO, message);
 #endif
 }
 
-void debug(char *message) {
+void debug(const char *message, ...) {
 #ifdef __APPLE__
-    cout << message << endl;
+    printf(*message, ...);
 #else
-    syslog (LOG_DEBUG, "%s", message.c_str());
+    syslog (LOG_DEBUG, "%s", message);
 #endif
 }
 
-void error(char *message) {
+void error(const char *message, ...) {
 #ifdef __APPLE__
-    cout << message << endl;
+    printf(*message, ...);
 #else
-    syslog (LOG_ERR, "%s", message.c_str());
+    syslog (LOG_ERR, "%s", message);
 #endif
 }

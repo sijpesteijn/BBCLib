@@ -5,9 +5,9 @@
 #ifndef BBLASER_LOG_H
 #define BBLASER_LOG_H
 
-extern void info(char *message);
-extern void debug(char *message);
-extern void error(char *message);
+extern void info(const char *message, ...);
+extern void debug(const char *message, ...);
+extern void error(const char *message, ...);
 
 
 #endif //BBLASER_LOG_H

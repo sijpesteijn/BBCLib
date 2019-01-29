@@ -5,10 +5,12 @@
  *      Author: gijs
  */
 
+#include <stdio.h>
 #include "gpio.h"
+#include "log.h"
 
 int gpio_open(gpio_properties *gpio) {
-	info("gpio_open: export gpio: %d", gpio->nr);
+	info(strcat("gpio_open: export gpio: ", gpio->nr));
 	FILE *export;
 	export = fopen(SYSFS_GPIO_DIR "/export", "w");
 	if (export < 0) {
