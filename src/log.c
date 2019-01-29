@@ -6,13 +6,14 @@
 #include <stdlib.h>
 #include "log.h"
 #include <syslog.h>
+#include <stdarg.h>.
 
 
 void info(const char *message, ...) {
 #ifdef __APPLE__
     printf(*message, ...);
 #else
-    syslog (LOG_INFO, message, ...);
+    syslog (LOG_INFO, message, __va_list__);
 #endif
 }
 
@@ -20,7 +21,7 @@ void debug(const char *message, ...) {
 #ifdef __APPLE__
     printf(*message, ...);
 #else
-    syslog (LOG_DEBUG, message, ...);
+    syslog (LOG_DEBUG, message);
 #endif
 }
 
@@ -28,6 +29,6 @@ void error(const char *message, ...) {
 #ifdef __APPLE__
     printf(*message, ...);
 #else
-    syslog (LOG_ERR, message, ...);
+    syslog (LOG_ERR, message);
 #endif
 }
