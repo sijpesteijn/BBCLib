@@ -20,11 +20,11 @@ void getLedTrigger(led_info *led) {
 	snprintf(buf, sizeof(buf), leddir "trigger", led->lednr);
 
 	printf(buf);
-//	fd = fopen(buf, "r");
-//	if (fd < 0) {
-//		perror("led/trigger");
-//	}
-//
+	fd = fopen(buf, "r");
+	if (fd < 0) {
+		error("On board leds: could not get led trigger");
+	}
+
 //	char str[92];
 //	fgets(str, 92, fd);
 //	for(i = 0; i < 92; i++) {
