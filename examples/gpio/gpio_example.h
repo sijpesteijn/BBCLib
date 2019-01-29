@@ -6,7 +6,6 @@
  */
 
 #include <stdio.h>
-#include "../../src/core.h"
 #include "../../src/gpio.h"
 
 #define LEDGPIO 60;

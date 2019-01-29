@@ -6,6 +6,7 @@
  */
 
 #include "uart.h"
+#include "log.h"
 #include <string.h>
 #include <fcntl.h>
 
