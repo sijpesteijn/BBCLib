@@ -32,8 +32,16 @@ int main(int argc, char **argv) {
 	printf("13 - i2c ADXL345\n");
 	printf("14 - i2c ADXL345\n");
 
-	char c[100];
-	scanf("%s" , c) ;
+    char c;
+
+    printf("Enter character: ");
+    c = getchar();
+
+    printf("Character entered: ");
+    putchar(c);
+
+//	scanf("%s" , c);
+    printf("aaa%s\n", c);
 	if (strcmp(c,"1") == 0) {
 		onBoardLedsExample();
 	} else if (strcmp(c,"2") == 0) {

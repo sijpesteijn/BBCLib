@@ -190,7 +190,8 @@ void flipflop() {
 }
 
 int onBoardLedsExample() {
-	led0 = malloc(sizeof(led_info));
+	printf("Running onboard leds example.");
+    led0 = malloc(sizeof(led_info));
 	led1 = malloc(sizeof(led_info));
 	led2 = malloc(sizeof(led_info));
 	led3 = malloc(sizeof(led_info));
