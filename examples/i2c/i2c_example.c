@@ -6,7 +6,6 @@
  */
 
 #include "i2c_example.h"
-#include "../../src/log.h"
 #include <unistd.h>
 #include <stdlib.h>
 
@@ -59,8 +58,8 @@ int i2c8x8LedMatrix() {
 	i2c->deviceAddress = 0x70;
 	i2c->openMode = O_RDWR;
 	if (open_i2c(i2c) == -1) {
-		debug("Could not open i2c bus.");
-		return 0;
+		perror("Could not open i2c bus.");
+		return -1;
 	}
 
 	// Setup matrix
@@ -73,7 +72,9 @@ int i2c8x8LedMatrix() {
 	play(i2c, 3, smile, 100);
 
 	free(i2c);
-	debug("Finished i2c example.");
+#ifdef BBCLIB_DBG
+	printf("Finished i2c example.");
+#endif
 	return 0;
 }
 
@@ -93,7 +94,7 @@ int i2cADXL345() {
 	i2c->deviceAddress = ADX_DEVID;
 	i2c->openMode = O_RDWR;
 	if (open_i2c(i2c) == -1) {
-		debug("Could not open i2c bus.");
+		perror("Could not open i2c bus.");
 		return 0;
 	}
 	unsigned char *readBuffer = malloc(sizeof(unsigned char) * BUFFER_SIZE);
@@ -104,9 +105,9 @@ int i2cADXL345() {
 	write_data_i2c(i2c, 0x00, 0x00);
 
 	read_i2c(i2c, readBuffer, BUFFER_SIZE);
-	debug("The Device ID is: 0x%02x", readBuffer[0x00]);
-	debug("The POWER_CTL mode is: 0x%02x", readBuffer[POWER_CTL]);
-	debug("The DATA_FORMAT is: 0x%02x", readBuffer[DATA_FORMAT]);
+//	debug("The Device ID is: 0x%02x", readBuffer[0x00]);
+//	debug("The POWER_CTL mode is: 0x%02x", readBuffer[POWER_CTL]);
+//	debug("The DATA_FORMAT is: 0x%02x", readBuffer[DATA_FORMAT]);
 
 	int i;
 	for (i = 0; i < 20; i++) {

@@ -6,9 +6,9 @@
  */
 
 #include "uart.h"
-#include "log.h"
 #include <string.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 int uart_open(uart_properties *uart) {
 	FILE *slots;
@@ -47,20 +47,20 @@ int uart_open(uart_properties *uart) {
 
 int uart_send(uart_properties *uart, char *tx, int length) {
 	if (write(uart->fd, tx, length) == -1) {
-		error("Could not write %s to uart %i", tx, uart->uart_id);
+//		perror("Could not write %s to uart %i", tx, uart->uart_id);
 		return -1;
 	}
-	info("Wrote %s to uart %i", tx, uart->uart_id);
+//	info("Wrote %s to uart %i", tx, uart->uart_id);
 	return 0;
 }
 
 int uart_read(uart_properties *uart,unsigned char *rx, int length) {
 	int count;
 	if( (count = read(uart->fd,(void*)rx,length)) > 0) {
-		error("Could not read from uart %i", uart->uart_id);
+//		error("Could not read from uart %i", uart->uart_id);
 		return count;
 	}
-	info("Read %s from uart %i", rx, uart->uart_id);
+//	info("Read %s from uart %i", rx, uart->uart_id);
 	return 0;
 }
 

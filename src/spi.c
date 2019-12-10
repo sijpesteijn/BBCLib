@@ -6,11 +6,11 @@
  */
 
 #include "spi.h"
-#include "log.h"
 #include <sys/ioctl.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 uint8_t spi_open(spi_properties *spi) {
-//	syslog (LOG_INFO, "spi open - spi:%d bits_per_word:%d speed:%d mode:%f", spi, bits_per_word, speed, mode);
     char filename[20];
     sprintf(filename, "/dev/spidev1.%d", spi->spi_id);
     spi->fd = open(filename, spi->flags);
@@ -18,7 +18,7 @@ uint8_t spi_open(spi_properties *spi) {
 		perror("could not open spi.");
 		return -1;
     }
-    info("FD: %i", spi->fd);
+
     if (ioctl(spi->fd, SPI_IOC_WR_MODE, &spi->mode)==-1){
        perror("SPI: Can't set SPI mode.");
        return -1;
@@ -33,15 +33,15 @@ uint8_t spi_open(spi_properties *spi) {
     }
 
     // Check that the properties have been set
-    info("SPI fd is: %d\n", spi->fd);
-    info("SPI Mode is: %d\n", spi->mode);
-    info("SPI Bits is: %d\n", spi->bits_per_word);
-    info("SPI Speed is: %d\n", spi->speed);
+//    info("SPI fd is: %d\n", spi->fd);
+//    info("SPI Mode is: %d\n", spi->mode);
+//    info("SPI Bits is: %d\n", spi->bits_per_word);
+//    info("SPI Speed is: %d\n", spi->speed);
     return 0;
 }
 
 uint8_t spi_close(spi_properties *spi) {
-    info("spi close - spi:%d", spi->fd);
+//    info("spi close - spi:%d", spi->fd);
     close(spi->fd);
     return 0;
 }

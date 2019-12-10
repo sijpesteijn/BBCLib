@@ -5,12 +5,13 @@
  *      Author: gijs
  */
 
+#include <stdio.h>
 #include "gpio_example.h"
-#include "../../src/log.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 /*
- * This example will open the gpio 60 port and flash the led 20 times.
+ * This example will open the gpio 60 port and flash the led 5 times.
  */
 int gpioLedExample() {
 	gpio_properties *gpio = malloc(sizeof(gpio_properties));
@@ -21,17 +22,19 @@ int gpioLedExample() {
 
 	if (isOpen == 0) {
 		int i=0;
-		for(i=0;i<10;i++) {
+		for(i=0;i<5;i++) {
 			gpio_set_value(gpio, 1);
 			sleep(1);
 			gpio_set_value(gpio, 0);
 			sleep(1);
 		}
-		gpio_close(gpio);
+        gpio_unexport(gpio->nr);
 	}
 	free(gpio);
-    debug("Finished gpio led example.");
-	return 0;
+#ifdef BBCLIB_DBG
+    printf("Finished gpio led example.");
+#endif
+    return 0;
 }
 
 /*
@@ -47,14 +50,16 @@ int gpioInputExample() {
 	int isOpen = gpio_open(gpio);
 
 	if (isOpen == 0) {
-		for(i=0;i<600;i++) {
+		for(i=0;i<60;i++) {
 			value = gpio_get_value(gpio);
 			printf("Value: %d\n", value);
 			sleep(1);
 		}
-		gpio_close(gpio);
+        gpio_unexport(gpio->nr);
 	}
-    debug("Finished gpio input example.");
+#ifdef BBCLIB_DBG
+    printf("Finished gpio input example.");
+#endif
 	return 0;
 }
 
@@ -73,19 +78,22 @@ int gpioInputLedExample() {
 	button->nr = BUTTONGPIO;
 	button->direction = INPUT_PIN;
 
-	int isOpen = gpio_open(led) && gpio_open(button);
+	int isOpen = gpio_open(led);
+	isOpen &= gpio_open(button);
 
 	if (isOpen == 0) {
-		for(i=0;i<600;i++) {
+		for(i=0;i<2;i++) {
 			value = gpio_get_value(button);
 			gpio_set_value(led, value);
 			sleep(1);
 		}
-		gpio_close(led);
-		gpio_close(button);
+        gpio_unexport(led->nr);
+        gpio_unexport(button->nr);
 	}
 	free(led);
 	free(button);
-    debug("Finished gpio input led example.");
+#ifdef BBCLIB_DBG
+	printf("Finished gpio input led example.");
+#endif
 	return 0;
 }

@@ -22,7 +22,7 @@ typedef struct {
 } gpio_properties;
 
 extern int gpio_open(gpio_properties *gpio);
-extern int gpio_close(gpio_properties *gpio);
+extern int gpio_unexport(int nr);
 extern int gpio_set_value(gpio_properties *gpio, int value);
 extern int gpio_get_value(gpio_properties *gpio);
 extern int gpio_set_edge(gpio_properties *gpio, char *edge);

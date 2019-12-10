@@ -14,7 +14,6 @@
 #include "./uart/uart_example.h"
 #include "./leds/onboardleds.h"
 
-
 int main(int argc, char **argv) {
 	printf("Choose the example to run:\n");
 	printf("1 - onboard leds\n");
@@ -32,45 +31,45 @@ int main(int argc, char **argv) {
 	printf("13 - i2c ADXL345\n");
 	printf("14 - i2c ADXL345\n");
 
-    char c;
+    printf("Enter example number to run: ");
+    char c = '5'; //getchar();
 
-    printf("Enter character: ");
-    c = getchar();
-
-    printf("Character entered: ");
-    putchar(c);
-
-//	scanf("%s" , c);
-    printf("aaa%s\n", c);
-	if (strcmp(c,"1") == 0) {
-		onBoardLedsExample();
-	} else if (strcmp(c,"2") == 0) {
-		gpioLedExample();
-	} else if (strcmp(c, "3") == 0) {
-		gpioInputExample();
-	} else if (strcmp(c, "4") == 0) {
-		gpioInputLedExample();
-	} else if (strcmp(c, "5") == 0) {
-		spiMCP23S08Example();
-	} else if (strcmp(c, "6") == 0) {
-		spiADXL345Example();
-	} else if (strcmp(c, "7") == 0) {
-		spiMCP4902Example();
-	} else if (strcmp(c, "8") == 0) {
-		spiMCP4912Example();
-	} else if (strcmp(c, "9") == 0) {
-		spiMCP4922Example();
-	} else if (strcmp(c, "10") == 0) {
-		i2c8x8LedMatrix();
-	} else if (strcmp(c, "11") == 0) {
-		i2cADXL345();
-	} else if (strcmp(c, "12") == 0) {
-		uartExample();
-	} else if (strcmp(c, "13") == 0) {
-		pwmExample();
-	} else if (strcmp(c, "14") == 0) {
-		spiMC23S08_MCP4902Example();
-	}
+    switch (c) {
+        case '1':
+            onBoardLedsExample();
+            break;
+        case '2' :
+            gpioLedExample();
+            break;
+        case '3' :
+            gpioInputExample();
+            break;
+        case '4' :
+            gpioInputLedExample();
+            break;
+        case '5' :
+            spiMCP23S08Example();
+            break;
+    }
+//	} else if (strcmp(&c, "6") == 0) {
+//		spiADXL345Example();
+//	} else if (strcmp(&c, "7") == 0) {
+//		spiMCP4902Example();
+//	} else if (strcmp(&c, "8") == 0) {
+//		spiMCP4912Example();
+//	} else if (strcmp(&c, "9") == 0) {
+//		spiMCP4922Example();
+//	} else if (strcmp(&c, "10") == 0) {
+//		i2c8x8LedMatrix();
+//	} else if (strcmp(&c, "11") == 0) {
+//		i2cADXL345();
+//	} else if (strcmp(&c, "12") == 0) {
+//		uartExample();
+//	} else if (strcmp(&c, "13") == 0) {
+//		pwmExample();
+//	} else if (strcmp(&c, "14") == 0) {
+//		spiMC23S08_MCP4902Example();
+//	}
 
 	return 0;
 }

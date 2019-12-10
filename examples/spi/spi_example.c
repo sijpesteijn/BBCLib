@@ -6,7 +6,6 @@
  */
 
 #include "spi_example.h"
-#include "../../src/log.h"
 
 /*
  * MCP23S08 is a 8-Bit I/O Expander with Serial Interface.
@@ -48,7 +47,7 @@ int spiMCP23S08Example() {
 		}
 		spi_close(spi);
 	}
-	debug("Finished spi example.");
+	printf("Finished spi example.");
 	return 0;
 }
 
@@ -145,7 +144,7 @@ int spiMCP4902Example() {
 		write8Bits(spi, 0xf0, 0);
 	}
 	free(spi);
-	debug("Finished spi example.");
+    printf("Finished spi example.");
 	return 0;
 }
 
@@ -198,7 +197,7 @@ int spiMCP4912Example() {
 		write10Bits(spi, 0xf0, 0);
 	}
 	free(spi);
-	debug("Finished spi example.");
+    printf("Finished spi example.");
 	return 0;
 }
 
@@ -251,12 +250,12 @@ int spiMCP4922Example() {
 		write12Bits(spi, 0xf0, 0);
 	}
 	free(spi);
-	debug("Finished spi example.");
+    printf("Finished spi example.");
 	return 0;
 }
 
 void dprint(unsigned char value) {
-	debug("0x%02x", value);
+    printf("0x%02x", value);
 }
 
 int set_MCP23S08_GPIO_values(spi_properties *spi, unsigned char value) {
@@ -344,6 +343,6 @@ int spiMC23S08_MCP4902Example() {
 	}
 
 	free(spi);
-	debug("Finished spi example.");
+    printf("Finished spi example.");
 	return 0;
 }

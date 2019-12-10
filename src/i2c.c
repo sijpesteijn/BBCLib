@@ -5,12 +5,15 @@
  *      Author: gijs
  */
 
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
 #include "i2c.h"
 
-int res, daddress;
+int res;
 
 int open_i2c(i2c_properties *i2c) {
-	info("i2c open - i2c:%d device address: 0x%x mode:%i", i2c->i2cnr,
+    printf("i2c open - i2c:%d device address: 0x%x mode:%i", i2c->i2cnr,
 			i2c->deviceAddress, i2c->openMode);
 	char filename[20];
 
@@ -18,17 +21,17 @@ int open_i2c(i2c_properties *i2c) {
 	i2c->fd = open(filename, i2c->openMode);
 	if (i2c->fd < 0) {
 		if (errno == ENOENT) {
-			error("Error: Could not open file /dev/i2c-%d: %s\n", i2c->i2cnr, strerror(ENOENT));
+            printf("Error: Could not open file /dev/i2c-%d: %s\n", i2c->i2cnr, strerror(ENOENT));
 		} else {
-			error("Error: Could not open file `%s': %s\n", filename, strerror(errno));
+            printf("Error: Could not open file `%s': %s\n", filename, strerror(errno));
 			if (errno == EACCES)
-				error("Run as root?\n");
+                printf("Run as root?\n");
 		}
 		return -1;
 	}
 
 	if (ioctl(i2c->fd, I2C_SLAVE, i2c->deviceAddress) < 0) {
-		error("Error: Could not set address to 0x%02x: %s\n",
+        printf("Error: Could not set address to 0x%02x: %s\n",
 				i2c->deviceAddress, strerror(errno));
 		return -errno;
 	}
@@ -38,7 +41,7 @@ int open_i2c(i2c_properties *i2c) {
 int write_byte_i2c(i2c_properties *i2c, unsigned char reg) {
 	res = i2c_smbus_write_byte(i2c->fd, reg);
 	if (res < 0) {
-		error("Warning - write failed, filename=%i, register=%i\n",
+        printf("Warning - write failed, filename=%i, register=%i\n",
 				i2c->fd, reg);
 		return 1;
 	}
@@ -50,7 +53,7 @@ int write_data_i2c(i2c_properties *i2c, unsigned char reg, char value) {
 	buf[0] = reg;
 	buf[1] = value;
 	if (write(i2c->fd, buf, 2) != 2) {
-		error("Warning - write data failed, filename=%i, register=%i\n", i2c->fd,
+        printf("Warning - write data failed, filename=%i, register=%i\n", i2c->fd,
 				reg);
 		return 1;
 	}
@@ -59,11 +62,11 @@ int write_data_i2c(i2c_properties *i2c, unsigned char reg, char value) {
 
 int read_i2c(i2c_properties *i2c, unsigned char *readBuffer, int bufferSize) {
 	if (read(i2c->fd, readBuffer, bufferSize) != bufferSize) {
-		error("Failed to read in the buffer\n");
+        printf("Failed to read in the buffer\n");
 		return 1;
 	}
 	if(readBuffer[0x00]!=0xE5){
-		info("Problem detected! Device ID is wrong");
+        printf("Problem detected! Device ID is wrong");
 	}
 	return 0;
 }

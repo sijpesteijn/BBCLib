@@ -5,21 +5,21 @@
  *      Author: gijs
  */
 
+#include <string.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include "pwm.h"
-#include "log.h"
 
 int pwm_open(pwm_properties *pwm) {
 	char filename[60] = PWM_PATH;
 	strcat(filename, pwm->name);
 
 	if (access(filename, F_OK) == -1) {
-		error("Could not open file: ", filename);
-		return 0;
+		perror("Error");
+		return -1;
 	}
-	return 1;
+	return 0;
 }
 
 int pwm_set_run(pwm_properties *pwm, int run) {
@@ -33,9 +33,7 @@ int pwm_set_run(pwm_properties *pwm, int run) {
 	char buf[2];
 	sprintf(buf, "%d", run);
 	if (write(file, buf, 2) < 0) {
-	    char* str;
-        sprintf(str, "Could not execute run. %d", run);
-		error(str);
+	    perror("Could not execute run.");
 		return -1;
 	}
 	close(file);
@@ -53,7 +51,7 @@ int pwm_set_period(pwm_properties *pwm, int period) {
 	char buf[4];
 	sprintf(buf, "%d", period);
 	if (write(file, buf, 4) < 0) {
-		error("Could not set period. %d", period);
+		perror("Could not set period.");
 		return -1;
 	}
 	close(file);
@@ -70,7 +68,7 @@ int pwm_set_duty(pwm_properties *pwm, int duty) {
 	char buf[4];
 	sprintf(buf, "%d", duty);
 	if (write(file, buf, 4) < 0) {
-		error("Could not set duty. %d", duty);
+		perror("Could not set duty.");
 		return -1;
 	}
 	close(file);

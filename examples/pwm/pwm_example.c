@@ -5,8 +5,9 @@
  *      Author: gijs
  */
 
+#include <stdlib.h>
+#include <unistd.h>
 #include "pwm_example.h"
-#include "../../src/log.h"
 
 int pwmExample() {
 
@@ -40,7 +41,7 @@ int pwmExample() {
 					printf("Could not set duty.\n");
 					return -1;
 				}
-				debug("Wrote %d to pwm (%s)", i, pwm->name);
+                printf("Wrote %d to pwm (%s)", i, pwm->name);
 				usleep(100000);
 			}
 			i = 10;
@@ -48,6 +49,6 @@ int pwmExample() {
 
 		pwm_set_run(pwm, 0);
 	}
-	debug("Finished pwm example.");
+    printf("Finished pwm example.");
 	return 0;
 }

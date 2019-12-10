@@ -6,7 +6,6 @@
  */
 
 #include "uart_example.h"
-#include "../../src/log.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -55,6 +54,7 @@ int uartExample() {
 		uart_close(uart);
 	}
 
-	debug("Finished pwm example.");
+
+	printf("Finished pwm example.");
 	return 0;
 }

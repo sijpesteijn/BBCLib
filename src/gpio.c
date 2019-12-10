@@ -7,41 +7,53 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "gpio.h"
-#include "log.h"
+
+void gpio_export(int nr) {
+    FILE *fd1 = fopen(SYSFS_GPIO_DIR "/export", "w");
+    if (fd1 < 0) {
+        perror("Error - Could not export gpio");
+    }
+    char str[15];
+    sprintf(str, "%d", nr);
+    fputs(str, fd1);
+    fflush(fd1);
+    fclose(fd1);
+    sleep(1);
+}
 
 int gpio_open(gpio_properties *gpio) {
-//	info("gpio_open: export gpio: %d", gpio->nr);
-	FILE *export;
-	export = fopen(SYSFS_GPIO_DIR "/export", "w");
-	if (export < 0) {
-		perror("gpio/export");
-		return 1;
-	}
-	char str[15];
-	sprintf(str, "%d", gpio->nr);
-	fputs(str, export);
-	fclose(export);
-	printf("%d\n", (int)gpio->direction);
-	FILE *fd;
-	char buf[MAX_BUF];
+    char gpio_dir[MAX_BUF];
+    snprintf(gpio_dir, sizeof(gpio_dir), SYSFS_GPIO_DIR "/gpio%d", gpio->nr);
 
-	snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/direction", gpio->nr);
-	fd = fopen(buf, "w");
-	if (fd < 0) {
-		error("Could not set gpio direction: %s", gpio->direction);
-		return 1;
+    struct stat buffer;
+    int exist = stat(gpio_dir, &buffer);
+    if(exist != 0) {
+        gpio_export(gpio->nr);
+    }
+
+    char gpio_direction[MAX_BUF];
+    strcpy(gpio_direction, gpio_dir);
+    strcat(gpio_direction, "/direction");
+	FILE *fd2 = fopen(gpio_direction, "w");
+	if (fd2 == NULL) {
+		perror("Error - Could not set gpio direction");
+		return -1;
 	}
 	if (gpio->direction == OUTPUT_PIN)
-		fputs("out", fd);
+		fputs("out", fd2);
 	else
-		fputs("in", fd);
-	fclose(fd);
+		fputs("in", fd2);
+	fclose(fd2);
+#ifdef BBCLIB_DBG
+    printf("Exporting gpio %d and direction %d", gpio->nr, gpio->direction);
+#endif
 	return 0;
 }
 
-int gpio_close(gpio_properties *gpio) {
-	info("gpio_close: unexport gpio: %d", gpio->nr);
+int gpio_unexport(int nr) {
 	FILE *fd;
 	fd = fopen(SYSFS_GPIO_DIR "/unexport", "w");
 	if (fd < 0) {
@@ -49,15 +61,17 @@ int gpio_close(gpio_properties *gpio) {
 		return 1;
 	}
 	char str[15];
-	sprintf(str, "%d", gpio->nr);
+	sprintf(str, "%d", nr);
 	fputs(str, fd);
 	fclose(fd);
 
-	return 0;
+#ifdef BBCLIB_DBG
+    printf("Closing gpio - unexport gpio: %d", gpio->nr);
+#endif
+    return 0;
 }
 
 int gpio_set_value(gpio_properties *gpio, int value) {
-    debug("gpio set value: %d, %d", gpio->nr, value);
 	FILE *fd;
 	char buf[MAX_BUF];
 
@@ -74,12 +88,14 @@ int gpio_set_value(gpio_properties *gpio, int value) {
 	fputs(str, fd);
 
 	fclose(fd);
+#ifdef BBCLIB_DBG
+    printf("Set gpio %d value: %d", gpio->nr, value);
+#endif
 	return 0;
 }
 
 int gpio_get_value(gpio_properties *gpio) {
-    debug("gpio get value: %d", gpio->nr);
-	int value;
+ 	int value;
 	FILE *fd;
 	char buf[MAX_BUF];
 
@@ -100,11 +116,13 @@ int gpio_get_value(gpio_properties *gpio) {
 	}
 
 	fclose(fd);
+#ifdef BBCLIB_DBG
+    printf("Get gpio %d value: %d", gpio->nr, value);
+#endif
 	return value;
 }
 
 int gpio_set_edge(gpio_properties *gpio, char *edge) {
-    debug("gpio set edge: %d, %s", gpio->nr, edge);
 	FILE *fd;
 	char buf[MAX_BUF];
 
@@ -118,5 +136,8 @@ int gpio_set_edge(gpio_properties *gpio, char *edge) {
 
 	fputs(edge, fd);
 	fclose(fd);
+#ifdef BBCLIB_DBG
+    printf("Set gpio %d edge: %s", gpio->nr, edge);
+#endif
 	return 0;
 }
